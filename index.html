@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTMstar｜北极星目标驱动的 Go-To-Market 策略</title>
+<meta name="description" content="产品定位、品牌叙事、GTM 增长辅导">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;700;800&family=Noto+Serif+SC:wght@400;600;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0f0e0d;
+    --white: #f5f3ef;
+    --cream: #ede9e1;
+    --gold: #C8862A;
+    --gold-light: #fff0d6;
+    --mid: #6b6760;
+    --border: #d8d4cc;
+    --text: #1A1814;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: rgba(245,243,239,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px; letter-spacing: -0.5px;
+    text-decoration: none; color: var(--black);
+  }
+  .nav-logo span { color: var(--gold); font-style: italic; }
+  .nav-links { display: flex; gap: 32px; font-size: 13px; font-weight: 500; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--mid); transition: color .2s; }
+  .nav-links a:hover { color: var(--black); }
+  .nav-cta {
+    background: var(--black); color: var(--white);
+    padding: 9px 22px; border-radius: 40px;
+    font-size: 13px; font-weight: 600; text-decoration: none;
+    transition: background .2s, transform .15s;
+  }
+  .nav-cta:hover { background: var(--gold); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 64px;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 48px 80px 64px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: #9B6510;
+    background: none; border: none;
+    padding: 5px 14px; border-radius: 20px;
+    margin-bottom: 28px; width: fit-content;
+    padding: 0;
+  }
+  .hero-h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(44px, 5vw, 68px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+    margin-bottom: 8px;
+  }
+  .hero-h1 .highlight {
+    color: var(--gold);
+    font-style: italic;
+    display: block;
+  }
+  .hero-subtitle {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 18px; font-weight: 600;
+    color: var(--text); margin: 20px 0 12px;
+    letter-spacing: 0.02em;
+  }
+  .hero-sub {
+    font-size: 15px; color: var(--mid);
+    max-width: 460px; margin-bottom: 40px;
+    line-height: 1.8; font-weight: 400;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 16px; }
+  .btn-primary {
+    background: var(--black); color: var(--white);
+    padding: 14px 32px; border-radius: 40px;
+    font-size: 14px; font-weight: 600; text-decoration: none;
+    transition: background .2s, transform .15s;
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+  }
+  .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--mid); font-size: 14px; font-weight: 500;
+    text-decoration: none; display: flex; align-items: center; gap: 6px;
+    transition: color .2s;
+  }
+  .btn-ghost:hover { color: var(--black); }
+
+  /* HERO RIGHT */
+  .hero-right {
+    background: #3A3731;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 64px 80px 48px;
+    position: relative; overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    background: var(--gold);
+    border-radius: 50%; opacity: .12;
+  }
+  .gtm-visual { position: relative; z-index: 1; }
+  .gtm-card {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin-bottom: 10px;
+    display: flex; align-items: flex-start; gap: 16px;
+    transition: transform .2s, background .2s;
+    cursor: default;
+    animation: slideIn .5s ease both;
+  }
+  .gtm-card:hover {
+    background: rgba(255,255,255,.1);
+    transform: translateX(6px);
+  }
+  .gtm-card:nth-child(2) { margin-left: 20px; animation-delay: .15s; }
+  .gtm-card:nth-child(3) { margin-left: 40px; animation-delay: .3s; }
+  .gtm-card:nth-child(4) { margin-left: 20px; animation-delay: .45s; }
+  .gtm-card:nth-child(1) { animation-delay: 0s; }
+  .gtm-badge {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 12px;
+    padding: 4px 12px; border-radius: 20px;
+    flex-shrink: 0; margin-top: 2px;
+    background: var(--gold-light); color: var(--gold);
+  }
+  .gtm-card-en { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.75); margin-bottom: 3px; letter-spacing: .1em; }
+  .gtm-card-cn {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px; font-weight: 600; color: #fff;
+  }
+  .gtm-card-desc { font-size: 12px; color: rgba(255,255,255,.8); margin-top: 4px; line-height: 1.5; }
+
+  /* SECTION COMMON */
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--mid);
+    margin-bottom: 20px;
+  }
+
+  /* ABOUT SECTION */
+  .about-section {
+    background: var(--cream);
+    padding: 100px 64px;
+  }
+  .about-inner { max-width: 1100px; margin: 0 auto; }
+  .about-layout {
+    display: grid; grid-template-columns: 280px 1fr;
+    gap: 80px; align-items: start;
+    margin-top: 48px;
+  }
+  .about-avatar {
+    width: 280px; height: 320px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--mid); font-size: 13px;
+    font-family: 'Syne', sans-serif; letter-spacing: .05em;
+  }
+  .about-name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 32px; font-weight: 900;
+    color: var(--black); margin-bottom: 8px;
+  }
+  .about-role {
+    font-size: 13px; color: var(--gold);
+    letter-spacing: .08em; text-transform: uppercase;
+    font-weight: 700; margin-bottom: 28px;
+  }
+  .about-content p {
+    font-size: 15px; color: var(--mid);
+    line-height: 1.9; margin-bottom: 16px;
+    font-weight: 400;
+  }
+  .about-tags {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px;
+  }
+  .tag {
+    font-size: 12px; padding: 6px 14px;
+    border: 1px solid var(--border); color: var(--mid);
+    border-radius: 100px; font-family: 'Syne', sans-serif;
+    transition: border-color .2s, color .2s;
+  }
+  .tag:hover { border-color: var(--black); color: var(--black); }
+
+  /* INSIGHTS */
+  .insights-section {
+    padding: 100px 64px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .insights-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 56px;
+  }
+  .insights-header h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 900; line-height: 1.1;
+  }
+  .insights-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .insight-card {
+    background: var(--white); padding: 36px 32px;
+    transition: background .2s; cursor: pointer;
+  }
+  .insight-card:hover { background: var(--cream); }
+  .insight-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .insight-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px; font-weight: 600;
+    line-height: 1.5; color: var(--black); margin-bottom: 10px;
+  }
+  .insight-card p { font-size: 13px; color: var(--mid); line-height: 1.7; }
+
+  /* ENABLEMENT */
+  .enablement-section {
+    background: #3A3731;
+    padding: 100px 64px;
+  }
+  .enablement-inner { max-width: 1100px; margin: 0 auto; }
+  .enablement-header { margin-bottom: 56px; }
+  .enablement-header .section-label { color: rgba(255,255,255,.65); }
+  .enablement-header h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 900; color: var(--white);
+    line-height: 1.15; margin-bottom: 12px;
+  }
+  .enablement-header p { font-size: 15px; color: rgba(255,255,255,.8); max-width: 520px; line-height: 1.8; }
+  .enable-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .enable-card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 32px 28px;
+    transition: border-color .2s, background .2s;
+  }
+  .enable-card:hover { border-color: var(--gold); background: rgba(200,134,42,.06); }
+  .enable-num {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic; font-size: 40px;
+    color: rgba(255,255,255,.25); line-height: 1;
+    margin-bottom: 20px;
+  }
+  .enable-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--white); margin-bottom: 10px;
+  }
+  .enable-card p { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.7; }
+
+  /* SERVICE */
+  .service-section {
+    padding: 100px 64px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .service-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: start;
+    margin-top: 48px;
+  }
+  .service-left h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 900; line-height: 1.2;
+    margin-bottom: 20px;
+  }
+  .service-left p { font-size: 15px; color: var(--mid); line-height: 1.9; margin-bottom: 16px; }
+  .service-list { list-style: none; border-top: 1px solid var(--border); }
+  .service-list li {
+    padding: 22px 0; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 16px;
+    transition: padding-left .2s;
+  }
+  .service-list li:hover { padding-left: 8px; }
+  .service-list li::before { content: '→'; color: var(--gold); font-size: 14px; margin-top: 3px; flex-shrink: 0; }
+  .service-list li h4 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px; font-weight: 600;
+    color: var(--black); margin-bottom: 4px;
+  }
+  .service-list li p { font-size: 13px; color: var(--mid); line-height: 1.6; }
+
+  /* CONNECTIONS */
+  .connections-section {
+    background: var(--cream);
+    padding: 100px 64px;
+  }
+  .connections-inner { max-width: 1100px; margin: 0 auto; }
+  .connections-layout {
+    background: #3A3731;
+    padding: 72px 64px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+    margin-top: 0;
+  }
+  .connections-left h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(26px, 3vw, 38px);
+    font-weight: 900; color: var(--white);
+    line-height: 1.3; margin-bottom: 16px;
+  }
+  .connections-left p { font-size: 14px; color: rgba(255,255,255,.75); line-height: 1.8; }
+  .connections-right { display: flex; flex-direction: column; gap: 12px; }
+  .connect-item {
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 22px 26px;
+    transition: border-color .2s, background .2s; cursor: pointer;
+  }
+  .connect-item:hover { border-color: var(--gold); background: rgba(200,134,42,.06); }
+  .connect-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--gold);
+    padding: 2px 8px; border-radius: 100px; margin-bottom: 8px;
+  }
+  .connect-item h4 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 4px;
+  }
+  .connect-item p { font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.5; }
+
+  /* NEWSLETTER */
+  .newsletter {
+    padding: 100px 64px;
+    text-align: center;
+    max-width: 680px; margin: 0 auto;
+  }
+  .newsletter h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 900; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .newsletter h2 em {
+    font-style: italic;
+    font-family: 'DM Serif Display', serif;
+    color: var(--gold);
+  }
+  .newsletter p { font-size: 15px; color: var(--mid); margin-bottom: 40px; line-height: 1.7; }
+  .newsletter-form { display: flex; flex-direction: column; gap: 12px; max-width: 420px; margin: 0 auto; }
+  .newsletter-form input {
+    padding: 14px 20px;
+    border: 1px solid var(--border);
+    background: white; font-family: 'Syne', sans-serif;
+    font-size: 14px; color: var(--black);
+    outline: none; transition: border-color .2s;
+    border-radius: 4px;
+  }
+  .newsletter-form input:focus { border-color: var(--gold); }
+  .newsletter-form input::placeholder { color: var(--mid); }
+  .newsletter-form a {
+    background: var(--black); color: white;
+    padding: 14px 28px; font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 600;
+    text-decoration: none; text-align: center;
+    border-radius: 40px; transition: background .2s;
+    display: block;
+  }
+  .newsletter-form a:hover { background: var(--gold); }
+  .newsletter-note { font-size: 12px !important; color: var(--mid) !important; margin-top: 4px !important; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 64px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--mid);
+  }
+  .footer-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; color: var(--black); text-decoration: none;
+  }
+  .footer-logo span { color: var(--gold); font-style: italic; }
+  .footer-links { display: flex; gap: 24px; list-style: none; }
+  .footer-links a { color: var(--mid); text-decoration: none; font-size: 13px; transition: color .2s; }
+  .footer-links a:hover { color: var(--black); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp .6s ease both; }
+  .delay-1 { animation-delay: .1s; }
+  .delay-2 { animation-delay: .2s; }
+  .delay-3 { animation-delay: .3s; }
+  .delay-4 { animation-delay: .4s; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 48px 24px 40px; }
+    .hero-right { padding: 40px 24px; }
+    .hero-h1 { font-size: 42px; }
+    .about-section, .insights-section, .enablement-section,
+    .service-section, .connections-section { padding: 60px 24px; }
+    .about-layout { grid-template-columns: 1fr; gap: 32px; }
+    .about-avatar { width: 100%; height: 200px; }
+    .insights-grid { grid-template-columns: 1fr; }
+    .enable-grid { grid-template-columns: 1fr 1fr; }
+    .service-layout { grid-template-columns: 1fr; gap: 40px; }
+    .connections-layout { grid-template-columns: 1fr; padding: 48px 32px; gap: 40px; }
+    .newsletter { padding: 72px 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 24px; }
+    .insights-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">GTM<span>star</span></a>
+  <ul class="nav-links">
+    <li><a href="#insights">洞察</a></li>
+    <li><a href="#enablement">赋能</a></li>
+    <li><a href="#service">服务</a></li>
+    <li><a href="#connections">连接</a></li>
+    <li><a href="#about">关于我</a></li>
+  </ul>
+  <a href="#service" class="nav-cta">开始合作</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow fade-up">产品定位 · 品牌叙事 · 营销策略</div>
+    <h1 class="hero-h1 fade-up delay-1">
+      Right product.<br>
+      Right market.<br>
+      <span class="highlight">Right now.</span>
+    </h1>
+    <p class="hero-subtitle fade-up delay-2">从 Day 1 开始 GTM 旅程，走向北极星目标。</p>
+    
+    <div class="hero-actions fade-up delay-3">
+      <a href="#insights" class="btn-primary">探索洞察</a>
+      <a href="#service" class="btn-ghost">开始合作 →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="gtm-visual">
+      <div class="gtm-card">
+        <span class="gtm-badge">Before</span>
+        <div>
+          <div class="gtm-card-en">MARKET INSIGHT</div>
+          <div class="gtm-card-cn">市场洞察 · 机会评估</div>
+          <div class="gtm-card-desc">市场够大吗？值得做吗？先想清楚再动手</div>
+        </div>
+      </div>
+      <div class="gtm-card">
+        <span class="gtm-badge">During</span>
+        <div>
+          <div class="gtm-card-en">PRODUCT VALIDATION</div>
+          <div class="gtm-card-cn">产品验证 · 需求匹配</div>
+          <div class="gtm-card-desc">从目标用户视角推敲产品，确认与需求匹配</div>
+        </div>
+      </div>
+      <div class="gtm-card">
+        <span class="gtm-badge">Launch</span>
+        <div>
+          <div class="gtm-card-en">BRAND NARRATIVE</div>
+          <div class="gtm-card-cn">品牌叙事 · 定位传递</div>
+          <div class="gtm-card-desc">把产品价值通过故事叙事传递给市场</div>
+        </div>
+      </div>
+      <div class="gtm-card">
+        <span class="gtm-badge">After</span>
+        <div>
+          <div class="gtm-card-en">ITERATE & GROW</div>
+          <div class="gtm-card-cn">持续迭代 · 增长飞轮</div>
+          <div class="gtm-card-desc">不断迭代产品、商业模型与渠道营销策略</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section class="insights-section fade-in" id="insights">
+  <div class="insights-header">
+    <div>
+      <div class="section-label">Insights · 洞察</div>
+      <h2>有观点的<br>GTM 思考</h2>
+    </div>
+    <a href="https://gtmstar.substack.com" target="_blank" class="btn-ghost">查看全部文章 →</a>
+  </div>
+  <div class="insights-grid">
+    <div class="insight-card">
+      <p class="insight-tag">GTM 方法论</p>
+      <h3>为什么大多数产品的 GTM 从一开始就错了</h3>
+      <p>GTM 不是发布会，而是从 Day 1 就开始的完整旅程——占位文字，即将发布</p>
+    </div>
+    <div class="insight-card">
+      <p class="insight-tag">产品定位</p>
+      <h3>定位不是你说什么，而是客户听到什么</h3>
+      <p>好的定位让客户在第一次接触时就感到「这就是为我做的」——占位文字，即将发布</p>
+    </div>
+    <div class="insight-card">
+      <p class="insight-tag">出海观察</p>
+      <h3>中国产品出海最容易踩的三个叙事陷阱</h3>
+      <p>功能翻译不是品牌叙事，直译不是本地化——占位文字，即将发布</p>
+    </div>
+  </div>
+</section>
+
+<!-- ENABLEMENT -->
+<section class="enablement-section fade-in" id="enablement">
+  <div class="enablement-inner">
+    <div class="enablement-header">
+      <div class="section-label">Enablement · 赋能</div>
+      <h2>建立能力，<br>而不只是做一次活动</h2>
+      <p>大多数团队不是败在执行，而是败在模糊——定位不清、信息未经验证、团队方向各异。赋能从源头解决这个问题。</p>
+    </div>
+    <div class="enable-grid">
+      <div class="enable-card">
+        <div class="enable-num">01</div>
+        <h3>GTM 工作坊</h3>
+        <p>半天到一天的深度工作坊，帮助团队对齐产品定位、目标市场和核心叙事。适合新产品上市前或进入新市场前。</p>
+      </div>
+      <div class="enable-card">
+        <div class="enable-num">02</div>
+        <h3>定位冲刺</h3>
+        <p>聚焦两周的高强度辅导，从竞争分析到 Messaging Framework，快速建立可落地的定位体系。</p>
+      </div>
+      <div class="enable-card">
+        <div class="enable-num">03</div>
+        <h3>一对一辅导</h3>
+        <p>针对 PMM、产品经理和创业者的个人辅导，围绕你当前最紧迫的 GTM 问题，每双周一次持续推进。</p>
+      </div>
+      <div class="enable-card">
+        <div class="enable-num">04</div>
+        <h3>模板与框架</h3>
+        <p>经过实战验证的 GTM 模板，包括市场分析框架、Positioning Canvas、Launch Checklist，即将开放下载。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE -->
+<section class="service-section fade-in" id="service">
+  <div class="section-label">Service · 服务</div>
+  <div class="service-layout">
+    <div class="service-left">
+      <h2>为准备出海的团队</h2>
+      <p>我每次只与少数几家公司深度合作——不是顾问报告，而是真正参与到你的产品和市场策略中。</p>
+      <p>如果你的团队正在准备进入新市场，欢迎聊聊我们是否合适。</p>
+      <div style="margin-top: 36px;">
+        <a href="mailto:hello@gtmstar.com" class="btn-primary">发起对话 →</a>
+      </div>
+    </div>
+    <ul class="service-list">
+      <li>
+        <div>
+          <h4>产品定位咨询</h4>
+          <p>Who you are, for whom, and why it matters. 帮助产品找到清晰的市场位置和竞争差异化。</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>品牌叙事策略</h4>
+          <p>The story your brand tells, consistently. 从品牌主张到内容语言，建立一致的叙事体系。</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>GTM 全案策略</h4>
+          <p>从市场评估、产品验证到渠道选择和上市执行，贯穿 Day 1 的完整 GTM 规划。</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h4>出海市场对接</h4>
+          <p>连接目标市场的本地资源、渠道伙伴和潜在买家网络。（即将开放）</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONNECTIONS -->
+<section class="connections-section fade-in" id="connections">
+  <div class="connections-inner">
+    <div class="section-label">Connections · 连接</div>
+    <div style="margin-top: 0; margin-bottom: 0;">
+    <div class="connections-layout">
+      <div class="connections-left">
+        <h2>出海这件事，<br>不用一个人扛</h2>
+        <p>这里是一个给 founder、PMM 和营销人的空间——一起解决那些没有标准答案的问题，共享资源与经验。</p>
+      </div>
+      <div class="connections-right">
+        <div class="connect-item">
+          <span class="connect-badge">Newsletter</span>
+          <h4>GTMstar 洞察周刊</h4>
+          <p>关于 GTM、品牌策略和出海市场的思考，值得你花时间的时候才发。</p>
+        </div>
+        <div class="connect-item">
+          <span class="connect-badge">即将开放</span>
+          <h4>出海资源网络</h4>
+          <p>连接正在出海的创业者、PMM 和市场专家，共享资源与经验。</p>
+        </div>
+        <div class="connect-item">
+          <span class="connect-badge">即将开放</span>
+          <h4>精英社群</h4>
+          <p>围绕 GTM 方法论建立的小型精英社群，限量开放。</p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section fade-in" id="about">
+  <div class="about-inner">
+    <div class="section-label">About · 关于我</div>
+    <div class="about-layout">
+      <div class="about-avatar">照片占位</div>
+      <div>
+        <div class="about-name">你的名字</div>
+        <div class="about-role">Product Marketing · GTM Strategist</div>
+        <p>这里是关于你的介绍占位文字。你可以写你的背景、专注领域，以及为什么你选择做这件事。建议 150-200 字，有温度，有观点，不要写成简历。</p>
+        <p>第二段可以写你的工作方式，或者你对 GTM 的核心理念——比如你对「从 Day 1 开始 GTM」这个观点的思考来源。</p>
+        <div class="about-tags">
+          <span class="tag">产品定位</span>
+          <span class="tag">品牌叙事</span>
+          <span class="tag">营销策略</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div style="border-top: 1px solid var(--border);">
+  <div class="newsletter fade-in">
+    <h2>保持<em>锐利</em></h2>
+    <p>关于 GTM、品牌策略和全球市场的思考——值得你花时间的时候才发，不会骚扰你的收件箱。</p>
+    <div class="newsletter-form">
+      <input type="email" placeholder="你的邮箱地址">
+      <a href="https://gtmstar.substack.com" target="_blank">订阅 GTMstar 周刊</a>
+      <p class="newsletter-note">在 Substack 上订阅 · 随时可以退订</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">GTM<span>star</span></a>
+  <p>© 2025 GTMstar · 北极星目标驱动的 Go-To-Market 策略</p>
+  <ul class="footer-links">
+    <li><a href="https://gtmstar.substack.com" target="_blank">Substack</a></li>
+    <li><a href="mailto:hello@gtmstar.com">联系我</a></li>
+  </ul>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
