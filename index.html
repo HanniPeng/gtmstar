@@ -18,13 +18,14 @@
     --text: #1A1814;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
     background: var(--white);
     color: var(--black);
     font-family: 'Syne', sans-serif;
     overflow-x: hidden;
     line-height: 1.6;
+    max-width: 100vw;
   }
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -154,8 +155,9 @@
     .about-section, .insights-section, .enablement-section, .service-section, .connections-section { padding: 60px 24px; }
     .about-layout { grid-template-columns: 1fr; gap: 32px; }
     .about-layout img { width: 100% !important; height: 240px !important; object-position: center top; }
-    .insights-section { padding: 60px 24px; }
-    .insights-grid { grid-template-columns: 1fr; }
+    .insights-section { padding: 60px 24px; max-width: 100%; }
+    .insights-grid { grid-template-columns: 1fr; width: 100%; }
+    .insight-card { word-break: break-word; }
     .enable-grid { grid-template-columns: 1fr !important; }
     .enablement-section { padding: 60px 24px; }
     .service-layout { grid-template-columns: 1fr; gap: 40px; }
@@ -320,9 +322,9 @@
       <p style="margin-top:24px; font-size:13px; color:var(--mid);">微信：hanni895005</p>
     </div>
     <ul class="service-list">
-      <li><div><h4>产品定位工作坊</h4><p>跨部门团队参与，全天定制化工作坊，输出差异化定位、核心 Slogan 和内容传播框架，让全团队说同一种语言。¥ 60,000 / 天起</p></div></li>
-      <li><div><h4>品牌叙事规划</h4><p>从品牌主张到内容语言，建立一致的叙事体系，让产品价值被目标市场看见。根据项目需求洽谈报价。</p></div></li>
-      <li><div><h4>GTM 全链路辅导</h4><p>从市场评估、产品验证到渠道选择和上市执行，贯穿 Day 1 的完整 GTM 规划与落地陪跑。根据项目需求洽谈报价。</p></div></li>
+      <li><div><h4>产品定位工作坊</h4><p>跨部门团队参与，全天定制化工作坊，输出差异化定位、核心 Slogan 和内容传播框架，让全团队说同一种语言。<span style="color:var(--gold); font-weight:600;">¥ 60,000 / 天起</span></p></div></li>
+      <li><div><h4>品牌叙事规划</h4><p>从品牌主张到内容语言，建立一致的叙事体系，让产品价值被目标市场看见。<span style="color:var(--gold); font-weight:600;">根据项目需求洽谈报价</span></p></div></li>
+      <li><div><h4>GTM 全链路辅导</h4><p>从市场评估、产品验证到渠道选择和上市执行，贯穿 Day 1 的完整 GTM 规划与落地陪跑。<span style="color:var(--gold); font-weight:600;">根据项目需求洽谈报价</span></p></div></li>
     </ul>
   </div>
 </section>
