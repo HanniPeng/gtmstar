@@ -188,11 +188,13 @@
     display: grid; grid-template-columns: repeat(3, 1fr);
     gap: 2px; background: var(--border);
     border: 1px solid var(--border);
+    align-items: stretch;
   }
   .insight-card {
     background: var(--white); padding: 36px 32px;
     transition: background .2s;
-    display: block;
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
     color: var(--black);
   }
@@ -206,10 +208,14 @@
     font-family: 'Noto Serif SC', serif;
     font-size: 17px; font-weight: 600;
     line-height: 1.5; color: var(--black); margin-bottom: 10px;
+    word-break: keep-all;
   }
   .insight-card p { font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .insight-card .insight-body {
+    flex: 1;
+  }
   .insight-card .insight-comment {
-    margin-top: 14px; font-size: 12px;
+    margin-top: 20px; font-size: 12px;
     color: var(--gold); font-weight: 600;
   }
 
@@ -543,21 +549,27 @@
     <a href="请替换为第1篇公众号链接" target="_blank" class="insight-card">
       <p class="insight-tag">GTM 方法论</p>
       <h3>GTM：企业增长的破局之道</h3>
-      <p>GTM不是一个发布动作，而是从Day 1就开始的全局操盘。用安索夫矩阵重新定义新产品、新市场的四种增长路径，以及对应谁来负责。</p>
+      <div class="insight-body">
+        <p>GTM不是一个发布动作，而是从Day 1就开始的全局操盘。用安索夫矩阵重新定义新产品、新市场的四种增长路径，以及对应谁来负责。</p>
+      </div>
       <p class="insight-comment">我的判断：大多数企业GTM失败，不是执行问题，是一开始就选错了象限。→</p>
     </a>
 
     <a href="请替换为第12篇公众号链接" target="_blank" class="insight-card">
       <p class="insight-tag">工具手册</p>
-      <h3>产品GTM的20个关键词（附中英文解释）</h3>
-      <p>ICP、PMF、CAC、NPS……GTM的"黑话"不懂就没法跨部门沟通。整理了20个最核心的术语，附中英文解释，建议收藏备查。</p>
+      <h3>产品GTM的20个关键词</h3>
+      <div class="insight-body">
+        <p>ICP、PMF、CAC、NPS……GTM的"黑话"不懂就没法跨部门沟通。整理了20个最核心的术语，附中英文解释，建议收藏备查。</p>
+      </div>
       <p class="insight-comment">我的判断：这些词不只是概念，每一个背后都是一个决策节点。→</p>
     </a>
 
     <a href="请替换为第24篇公众号链接" target="_blank" class="insight-card">
       <p class="insight-tag">增长案例</p>
       <h3>Canva从0到420亿美金，GTM教科书级案例</h3>
-      <p>Canva上线第一天只来了500个用户，却在十年内成长为420亿美金的公司。从CPO视角拆解ICP选择、PMF验证、SEO增长策略的完整决策链。</p>
+      <div class="insight-body">
+        <p>Canva上线第一天只来了500个用户，却在十年内成长为420亿美金的公司。从CPO视角拆解ICP选择、PMF验证、SEO增长策略的完整决策链。</p>
+      </div>
       <p class="insight-comment">我的判断：Canva最关键的转折不是找到了好产品，是找到了第一批真正爱它的人。→</p>
     </a>
 
