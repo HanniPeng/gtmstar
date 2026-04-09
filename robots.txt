@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# AI爬虫
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+Sitemap: https://www.gtmstar.com/sitemap.xml
