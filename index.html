@@ -152,9 +152,9 @@
     .hero-left { padding: 48px 24px 40px; }
     .hero-right { padding: 40px 24px; }
     .hero-h1 { font-size: 42px; }
-    .about-section, .insights-section, .enablement-section, .service-section, .connections-section { padding: 60px 24px; }
-    .resource-grid { grid-template-columns: 1fr !important; }
-    .resource-layout { grid-template-columns: 1fr !important; gap: 40px !important; }
+    .about-section, .insights-section, .enablement-section, .service-section, .connections-section, .resource-section { padding: 60px 24px; }
+    .resource-layout { grid-template-columns: 1fr !important; gap: 40px !important; padding: 0 !important; }
+    .resource-grid { grid-template-columns: 1fr 1fr !important; }
     .about-layout { grid-template-columns: 1fr; gap: 32px; }
     .about-layout img { width: 100% !important; height: 240px !important; object-position: center top; }
     .insights-section { padding: 60px 24px; max-width: 100%; }
@@ -332,9 +332,9 @@
   </div>
 </section>
 
-<section style="background: var(--cream); padding: 100px 64px;">
+<section class="resource-section" style="background: var(--cream); padding: 100px 64px;">
   <div style="max-width: 1100px; margin: 0 auto;">
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+    <div class="resource-layout" style="display:grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
       <div>
         <div class="section-label">Resources · 资源库</div>
         <h2 style="font-family:'Noto Serif SC',serif; font-size:clamp(32px,4vw,48px); font-weight:900; line-height:1.15; margin-bottom:24px;">GTM 工具箱</h2>
@@ -342,7 +342,7 @@
         <p style="font-size:15px; color:var(--mid); line-height:1.9; margin-bottom:36px;">个人能力有限，但可以帮你筛掉噪音，找到真正有用的东西。</p>
         <a href="https://www.notion.so/GTMstar-33df1c1a06df8077aba5dc26df3de754" target="_blank" class="btn-primary">进入资源库 →</a>
       </div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+      <div class="resource-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
         <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
           <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">市场与研究</div>
           <div style="font-size:13px; color:var(--mid); line-height:1.6;">市场分析 · 竞品研究 · ICP</div>
