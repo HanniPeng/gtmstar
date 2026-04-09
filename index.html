@@ -92,7 +92,7 @@
   .enablement-header .section-label { color: rgba(255,255,255,.65); }
   .enablement-header h2 { font-family: 'Noto Serif SC', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 900; color: var(--white); line-height: 1.15; margin-bottom: 12px; }
   .enablement-header p { font-size: 15px; color: rgba(255,255,255,.8); max-width: 520px; line-height: 1.8; }
-  .enable-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch; }
+  .enable-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: stretch; }
   .enable-card { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); padding: 32px 28px; transition: border-color .2s, background .2s; }
   .enable-card:hover { border-color: var(--gold); background: rgba(200,134,42,.06); }
   .enable-num { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 40px; color: rgba(255,255,255,.25); line-height: 1; margin-bottom: 20px; }
@@ -153,8 +153,11 @@
     .hero-h1 { font-size: 42px; }
     .about-section, .insights-section, .enablement-section, .service-section, .connections-section { padding: 60px 24px; }
     .about-layout { grid-template-columns: 1fr; gap: 32px; }
+    .about-layout img { width: 100% !important; height: 240px !important; object-position: center top; }
+    .insights-section { padding: 60px 24px; }
     .insights-grid { grid-template-columns: 1fr; }
-    .enable-grid { grid-template-columns: 1fr 1fr; }
+    .enable-grid { grid-template-columns: 1fr !important; }
+    .enablement-section { padding: 60px 24px; }
     .service-layout { grid-template-columns: 1fr; gap: 40px; }
     .connections-layout { grid-template-columns: 1fr; padding: 48px 32px; gap: 40px; }
     .newsletter { padding: 72px 24px; }
@@ -272,7 +275,7 @@
       <h2>自己先学，<br>再决定下一步</h2>
       <p>从一个人开始，也可以走出一套系统的 GTM 方法。</p>
     </div>
-    <div class="enable-grid" style="grid-template-columns: repeat(2, 1fr);">
+    <div class="enable-grid" style="grid-template-columns: repeat(2, 1fr); align-items: stretch;">
 
       <div class="enable-card" style="display:flex; flex-direction:column;">
         <div class="enable-num">01</div>
