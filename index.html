@@ -70,9 +70,8 @@
     font-size: 11px; font-weight: 700; letter-spacing: .12em;
     text-transform: uppercase; color: #9B6510;
     background: none; border: none;
-    padding: 5px 14px; border-radius: 20px;
-    margin-bottom: 28px; width: fit-content;
     padding: 0;
+    margin-bottom: 28px; width: fit-content;
   }
   .hero-h1 {
     font-family: 'DM Serif Display', serif;
@@ -171,6 +170,49 @@
     margin-bottom: 20px;
   }
 
+  /* INSIGHTS */
+  .insights-section {
+    padding: 100px 64px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .insights-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 56px;
+  }
+  .insights-header h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 900; line-height: 1.1;
+  }
+  .insights-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .insight-card {
+    background: var(--white); padding: 36px 32px;
+    transition: background .2s;
+    display: block;
+    text-decoration: none;
+    color: var(--black);
+  }
+  .insight-card:hover { background: var(--cream); }
+  .insight-tag {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .insight-card h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px; font-weight: 600;
+    line-height: 1.5; color: var(--black); margin-bottom: 10px;
+  }
+  .insight-card p { font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .insight-card .insight-comment {
+    margin-top: 14px; font-size: 12px;
+    color: var(--gold); font-weight: 600;
+  }
+
   /* ABOUT SECTION */
   .about-section {
     background: var(--cream);
@@ -214,47 +256,6 @@
     transition: border-color .2s, color .2s;
   }
   .tag:hover { border-color: var(--black); color: var(--black); }
-
-<!-- INSIGHTS -->
-<section class="insights-section fade-in" id="insights">
-  <div class="insights-header">
-    <div>
-      <div class="section-label">Insights · 洞察</div>
-      <h2>有观点的<br>GTM 思考</h2>
-    </div>
-    <a href="https://mp.weixin.qq.com" target="_blank" class="btn-ghost">查看全部文章 →</a>
-  </div>
-  <div class="insights-grid">
-
-    <a href="https://mp.weixin.qq.com" target="_blank" style="text-decoration:none; color:inherit; display:block;">
-      <div class="insight-card" style="height:100%;">
-        <p class="insight-tag">GTM 方法论</p>
-        <h3>GTM：企业增长的破局之道</h3>
-        <p>GTM不是一个发布动作，而是从Day 1就开始的全局操盘。用安索夫矩阵重新定义新产品、新市场的四种增长路径，以及对应谁来负责。</p>
-        <p style="margin-top:14px; font-size:12px; color:var(--gold); font-weight:600;">我的判断：大多数企业GTM失败，不是执行问题，是一开始就选错了象限。→</p>
-      </div>
-    </a>
-
-    <a href="https://mp.weixin.qq.com" target="_blank" style="text-decoration:none; color:inherit; display:block;">
-      <div class="insight-card" style="height:100%;">
-        <p class="insight-tag">工具手册</p>
-        <h3>产品GTM的20个关键词（附中英文解释）</h3>
-        <p>ICP、PMF、CAC、NPS……GTM的"黑话"不懂就没法跨部门沟通。整理了20个最核心的术语，附中英文解释，建议收藏备查。</p>
-        <p style="margin-top:14px; font-size:12px; color:var(--gold); font-weight:600;">我的判断：这些词不只是概念，每一个背后都是一个决策节点。→</p>
-      </div>
-    </a>
-
-    <a href="https://mp.weixin.qq.com" target="_blank" style="text-decoration:none; color:inherit; display:block;">
-      <div class="insight-card" style="height:100%;">
-        <p class="insight-tag">增长案例</p>
-        <h3>Canva从0到420亿美金，GTM教科书级案例</h3>
-        <p>Canva上线第一天只来了500个用户，却在十年内成长为420亿美金的公司。从CPO视角拆解ICP选择、PMF验证、SEO增长策略的完整决策链。</p>
-        <p style="margin-top:14px; font-size:12px; color:var(--gold); font-weight:600;">我的判断：Canva最关键的转折不是找到了好产品，是找到了第一批真正爱它的人。→</p>
-      </div>
-    </a>
-
-  </div>
-</section>
 
   /* ENABLEMENT */
   .enablement-section {
@@ -485,7 +486,6 @@
       <span class="highlight">Right now.</span>
     </h1>
     <p class="hero-subtitle fade-up delay-2">从 Day 1 开始 GTM 旅程，走向北极星目标。</p>
-    
     <div class="hero-actions fade-up delay-3">
       <a href="#insights" class="btn-primary">探索洞察</a>
       <a href="#service" class="btn-ghost">开始合作 →</a>
@@ -536,24 +536,31 @@
       <div class="section-label">Insights · 洞察</div>
       <h2>有观点的<br>GTM 思考</h2>
     </div>
-    <a href="https://gtmstar.substack.com" target="_blank" class="btn-ghost">查看全部文章 →</a>
+    <a href="https://mp.weixin.qq.com" target="_blank" class="btn-ghost">查看全部文章 →</a>
   </div>
   <div class="insights-grid">
-    <div class="insight-card">
+
+    <a href="请替换为第1篇公众号链接" target="_blank" class="insight-card">
       <p class="insight-tag">GTM 方法论</p>
-      <h3>为什么大多数产品的 GTM 从一开始就错了</h3>
-      <p>GTM 不是发布会，而是从 Day 1 就开始的完整旅程——占位文字，即将发布</p>
-    </div>
-    <div class="insight-card">
-      <p class="insight-tag">产品定位</p>
-      <h3>定位不是你说什么，而是客户听到什么</h3>
-      <p>好的定位让客户在第一次接触时就感到「这就是为我做的」——占位文字，即将发布</p>
-    </div>
-    <div class="insight-card">
-      <p class="insight-tag">出海观察</p>
-      <h3>中国产品出海最容易踩的三个叙事陷阱</h3>
-      <p>功能翻译不是品牌叙事，直译不是本地化——占位文字，即将发布</p>
-    </div>
+      <h3>GTM：企业增长的破局之道</h3>
+      <p>GTM不是一个发布动作，而是从Day 1就开始的全局操盘。用安索夫矩阵重新定义新产品、新市场的四种增长路径，以及对应谁来负责。</p>
+      <p class="insight-comment">我的判断：大多数企业GTM失败，不是执行问题，是一开始就选错了象限。→</p>
+    </a>
+
+    <a href="请替换为第12篇公众号链接" target="_blank" class="insight-card">
+      <p class="insight-tag">工具手册</p>
+      <h3>产品GTM的20个关键词（附中英文解释）</h3>
+      <p>ICP、PMF、CAC、NPS……GTM的"黑话"不懂就没法跨部门沟通。整理了20个最核心的术语，附中英文解释，建议收藏备查。</p>
+      <p class="insight-comment">我的判断：这些词不只是概念，每一个背后都是一个决策节点。→</p>
+    </a>
+
+    <a href="请替换为第24篇公众号链接" target="_blank" class="insight-card">
+      <p class="insight-tag">增长案例</p>
+      <h3>Canva从0到420亿美金，GTM教科书级案例</h3>
+      <p>Canva上线第一天只来了500个用户，却在十年内成长为420亿美金的公司。从CPO视角拆解ICP选择、PMF验证、SEO增长策略的完整决策链。</p>
+      <p class="insight-comment">我的判断：Canva最关键的转折不是找到了好产品，是找到了第一批真正爱它的人。→</p>
+    </a>
+
   </div>
 </section>
 
@@ -635,7 +642,6 @@
 <section class="connections-section fade-in" id="connections">
   <div class="connections-inner">
     <div class="section-label">Connections · 连接</div>
-    <div style="margin-top: 0; margin-bottom: 0;">
     <div class="connections-layout">
       <div class="connections-left">
         <h2>出海这件事，<br>不用一个人扛</h2>
@@ -659,7 +665,6 @@
         </div>
       </div>
     </div>
-    </div>
   </div>
 </section>
 
@@ -672,8 +677,10 @@
       <div>
         <div class="about-name">你的名字</div>
         <div class="about-role">Product Marketing · GTM Strategist</div>
-        <p>这里是关于你的介绍占位文字。你可以写你的背景、专注领域，以及为什么你选择做这件事。建议 150-200 字，有温度，有观点，不要写成简历。</p>
-        <p>第二段可以写你的工作方式，或者你对 GTM 的核心理念——比如你对「从 Day 1 开始 GTM」这个观点的思考来源。</p>
+        <div class="about-content">
+          <p>这里是关于你的介绍占位文字。你可以写你的背景、专注领域，以及为什么你选择做这件事。建议 150-200 字，有温度，有观点，不要写成简历。</p>
+          <p>第二段可以写你的工作方式，或者你对 GTM 的核心理念——比如你对「从 Day 1 开始 GTM」这个观点的思考来源。</p>
+        </div>
         <div class="about-tags">
           <span class="tag">产品定位</span>
           <span class="tag">品牌叙事</span>
