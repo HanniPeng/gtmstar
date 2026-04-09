@@ -76,17 +76,17 @@
   .about-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
   .tag { font-size: 12px; padding: 6px 14px; border: 1px solid var(--border); color: var(--mid); border-radius: 100px; font-family: 'Syne', sans-serif; transition: border-color .2s, color .2s; }
   .tag:hover { border-color: var(--black); color: var(--black); }
-  .insights-section { padding: 100px 64px; max-width: 1200px; margin: 0 auto; }
+  .insights-section { padding: 100px 64px; max-width: 1200px; margin: 0 auto; width: 100%; }
   .insights-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 56px; }
   .insights-header h2 { font-family: 'Noto Serif SC', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 900; line-height: 1.1; }
-  .insights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border: 1px solid var(--border); align-items: stretch; }
-  .insight-card { background: var(--white); padding: 36px 32px; transition: background .2s; display: flex; flex-direction: column; text-decoration: none; color: var(--black); }
+  .insights-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); border: 1px solid var(--border); align-items: stretch; width: 100%; }
+  .insight-card { background: var(--white); padding: 36px 32px; transition: background .2s; display: flex; flex-direction: column; text-decoration: none; color: var(--black); min-width: 0; overflow: hidden; }
   .insight-card:hover { background: var(--cream); }
   .insight-tag { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
-  .insight-card h3 { font-family: 'Noto Serif SC', serif; font-size: 17px; font-weight: 600; line-height: 1.5; color: var(--black); margin-bottom: 10px; word-break: keep-all; }
-  .insight-card p { font-size: 13px; color: var(--mid); line-height: 1.7; }
+  .insight-card h3 { font-family: 'Noto Serif SC', serif; font-size: 17px; font-weight: 600; line-height: 1.5; color: var(--black); margin-bottom: 10px; word-break: break-word; overflow-wrap: break-word; }
+  .insight-card p { font-size: 13px; color: var(--mid); line-height: 1.7; word-break: break-word; overflow-wrap: break-word; }
   .insight-card .insight-body { flex: 1; min-height: 80px; }
-  .insight-card .insight-comment { margin-top: 20px; font-size: 12px; color: var(--gold); font-weight: 600; padding-top: 16px; border-top: 1px solid var(--border); }
+  .insight-card .insight-comment { margin-top: 20px; font-size: 12px; color: var(--gold); font-weight: 600; padding-top: 16px; border-top: 1px solid var(--border); word-break: break-word; }
   .enablement-section { background: #3A3731; padding: 100px 64px; }
   .enablement-inner { max-width: 1100px; margin: 0 auto; }
   .enablement-header { margin-bottom: 56px; }
