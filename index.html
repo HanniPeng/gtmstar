@@ -215,41 +215,46 @@
   }
   .tag:hover { border-color: var(--black); color: var(--black); }
 
-  /* INSIGHTS */
-  .insights-section {
-    padding: 100px 64px;
-    max-width: 1200px; margin: 0 auto;
-  }
-  .insights-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 56px;
-  }
-  .insights-header h2 {
-    font-family: 'Noto Serif SC', serif;
-    font-size: clamp(32px, 4vw, 48px);
-    font-weight: 900; line-height: 1.1;
-  }
-  .insights-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 2px; background: var(--border);
-    border: 1px solid var(--border);
-  }
-  .insight-card {
-    background: var(--white); padding: 36px 32px;
-    transition: background .2s; cursor: pointer;
-  }
-  .insight-card:hover { background: var(--cream); }
-  .insight-tag {
-    font-size: 11px; font-weight: 700; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--gold);
-    margin-bottom: 14px;
-  }
-  .insight-card h3 {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 17px; font-weight: 600;
-    line-height: 1.5; color: var(--black); margin-bottom: 10px;
-  }
-  .insight-card p { font-size: 13px; color: var(--mid); line-height: 1.7; }
+  <!-- INSIGHTS -->
+<section class="insights-section fade-in" id="insights">
+  <div class="insights-header">
+    <div>
+      <div class="section-label">Insights · 洞察</div>
+      <h2>有观点的<br>GTM 思考</h2>
+    </div>
+    <a href="https://mp.weixin.qq.com/mp/appmsgalbum" target="_blank" class="btn-ghost">查看全部文章 →</a>
+  </div>
+  <div class="insights-grid">
+
+    <a href="https://mp.weixin.qq.com" target="_blank" style="text-decoration:none;">
+      <div class="insight-card">
+        <p class="insight-tag">GTM 方法论</p>
+        <h3>GTM：企业增长的破局之道</h3>
+        <p>GTM不是一个发布动作，而是从Day 1就开始的全局操盘。用安索夫矩阵重新定义新产品、新市场的四种增长路径，以及对应谁来负责。</p>
+        <p style="margin-top:14px; font-size:12px; color:var(--gold); font-weight:600;">我的判断：大多数企业GTM失败，不是执行问题，是一开始就选错了象限。→</p>
+      </div>
+    </a>
+
+    <a href="https://mp.weixin.qq.com" target="_blank" style="text-decoration:none;">
+      <div class="insight-card">
+        <p class="insight-tag">工具手册</p>
+        <h3>产品GTM的20个关键词（附中英文解释）</h3>
+        <p>ICP、PMF、CAC、NPS……GTM的"黑话"不懂就没法跨部门沟通。整理了20个最核心的术语，附中英文解释，建议收藏备查。</p>
+        <p style="margin-top:14px; font-size:12px; color:var(--gold); font-weight:600;">我的判断：这些词不只是概念，每一个背后都是一个决策节点。→</p>
+      </div>
+    </a>
+
+    <a href="https://mp.weixin.qq.com" target="_blank" style="text-decoration:none;">
+      <div class="insight-card">
+        <p class="insight-tag">增长案例</p>
+        <h3>Canva从0到420亿美金，GTM教科书级案例</h3>
+        <p>Canva上线第一天只来了500个用户，却在十年内成长为420亿美金的公司。从CPO视角拆解ICP选择、PMF验证、SEO增长策略的完整决策链。</p>
+        <p style="margin-top:14px; font-size:12px; color:var(--gold); font-weight:600;">我的判断：Canva最关键的转折不是找到了好产品，是找到了第一批真正爱它的人。→</p>
+      </div>
+    </a>
+
+  </div>
+</section>
 
   /* ENABLEMENT */
   .enablement-section {
