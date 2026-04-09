@@ -282,8 +282,7 @@
     .hero-h1 { font-size: 42px; }
     .about-section, .insights-section, .enablement-section, .service-section, .connections-section, .resource-section { padding: 60px 24px; }
     .resource-layout { grid-template-columns: 1fr !important; gap: 40px !important; padding: 0 !important; }
-    .resource-grid { grid-template-columns: 1fr 1fr !important; }
-    .about-layout { grid-template-columns: 1fr; gap: 32px; }
+    .resource-grid { grid-template-columns: 1fr 1fr !important; }    .about-layout { grid-template-columns: 1fr; gap: 32px; }
     .about-layout img { width: 100% !important; height: 240px !important; object-position: center top; }
     .insights-section { padding: 60px 24px; max-width: 100%; }
     .insights-grid { grid-template-columns: 1fr; width: 100%; }
@@ -329,7 +328,7 @@
   </div>
   <div class="hero-right">
     <div class="gtm-visual">
-      <div class="gtm-card">
+      <div class="gtm-card" style="margin-left:0; animation-delay:0s;">
         <span class="gtm-badge">Before</span>
         <div>
           <div class="gtm-card-en">MARKET INSIGHT</div>
@@ -337,7 +336,7 @@
           <div class="gtm-card-desc">市场够大吗？值得做吗？先想清楚再动手</div>
         </div>
       </div>
-      <div class="gtm-card">
+      <div class="gtm-card" style="margin-left:0; animation-delay:.15s;">
         <span class="gtm-badge">During</span>
         <div>
           <div class="gtm-card-en">PRODUCT VALIDATION</div>
@@ -345,7 +344,7 @@
           <div class="gtm-card-desc">从目标用户视角推敲产品，确认与需求匹配</div>
         </div>
       </div>
-      <div class="gtm-card">
+      <div class="gtm-card" style="margin-left:0; animation-delay:.3s;">
         <span class="gtm-badge">Launch</span>
         <div>
           <div class="gtm-card-en">BRAND NARRATIVE</div>
@@ -353,7 +352,7 @@
           <div class="gtm-card-desc">把产品价值通过故事叙事传递给市场</div>
         </div>
       </div>
-      <div class="gtm-card">
+      <div class="gtm-card" style="margin-left:0; animation-delay:.45s;">
         <span class="gtm-badge">After</span>
         <div>
           <div class="gtm-card-en">ITERATE & GROW</div>
@@ -418,7 +417,7 @@
         <p style="font-size:13px; color:rgba(255,255,255,.8); margin-bottom:20px;">正在创业的技术型创始人，以及想转型 GTM 的营销从业者。</p>
         <div style="padding-top:20px; border-top:1px solid rgba(255,255,255,.1); margin-top:auto;">
           <p style="font-size:13px; color:rgba(255,255,255,.5); margin-bottom:4px;">前 30 分钟免费 · 线上</p>
-          <p style="font-size:18px; color:var(--gold); font-weight:700; margin-bottom:16px;">¥ 2,000 / 小时</p>
+          <p style="font-size:18px; color:var(--gold); font-weight:700; margin-bottom:16px;">¥ 1,000 / 小时</p>
           <a href="mailto:hanni.peng@mindtalkconsulting.com?subject=预约一对一辅导" style="display:inline-block; background:var(--gold); color:white; font-size:12px; font-weight:700; padding:8px 18px; border-radius:40px; text-decoration:none;">立即联系 →</a>
         </div>
       </div>
@@ -460,43 +459,44 @@
   </div>
 </section>
 
-<section class="resource-section" style="background: var(--cream); padding: 72px 64px;">
+<section class="resource-section" style="background: var(--white); padding: 72px 64px;">
   <div style="max-width: 1100px; margin: 0 auto;">
-    <div class="resource-layout" style="display:grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
-      <div>
-        <div class="section-label">Resources · 资源库</div>
-        <h2 style="font-family:'Noto Serif SC',serif; font-size:clamp(32px,4vw,48px); font-weight:900; line-height:1.15; margin-bottom:24px;">GTM 工具箱</h2>
-        <p style="font-size:15px; color:var(--mid); line-height:1.9; margin-bottom:16px;">为出海企业 Go-to-Market 打造的资源库。精选市场分析、产品定位、内容营销、邮件获客、销售策略等领域的优质内容——文章、视频、工具、模板，持续更新。</p>
-        <p style="font-size:15px; color:var(--mid); line-height:1.9; margin-bottom:36px;">个人能力有限，但可以帮你筛掉噪音，找到真正有用的东西。</p>
-        <a href="https://apricot-bonsai-88e.notion.site/GTMstar-33df1c1a06df8077aba5dc26df3de754" target="_blank" class="btn-primary">进入资源库 →</a>
+
+    <div style="margin-bottom: 40px;">
+      <div class="section-label">Resources · 资源库</div>
+      <h2 style="font-family:'Noto Serif SC',serif; font-size:clamp(28px,3.5vw,42px); font-weight:900; line-height:1.2; margin-bottom:16px;">GTM 工具箱</h2>
+      <p style="font-size:15px; color:var(--mid); line-height:1.8; max-width:640px; margin-bottom:8px;">为出海科技企业打造的 GTM 资源库。文章、视频、书籍、模板，持续筛选更新。</p>
+      <p style="font-size:15px; color:var(--mid); line-height:1.8; max-width:640px; margin-bottom:32px;">适合：科技产品创业者、GTM 从业者。</p>
+      <a href="https://apricot-bonsai-88e.notion.site/GTMstar-33df1c1a06df8077aba5dc26df3de754" target="_blank" class="btn-primary">进入资源库 →</a>
+    </div>
+
+    <div class="resource-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
+      <div style="background:var(--cream); padding:20px 22px; border-left: 3px solid var(--gold);">
+        <div style="font-size:13px; font-weight:700; color:var(--black); margin-bottom:6px;">市场分析</div>
+        <div style="font-size:12px; color:var(--mid);">TAM · 竞品研究 · 机会评估</div>
       </div>
-      <div class="resource-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
-        <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
-          <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">市场与研究</div>
-          <div style="font-size:13px; color:var(--mid); line-height:1.6;">市场分析 · 竞品研究 · ICP</div>
-        </div>
-        <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
-          <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">产品定位</div>
-          <div style="font-size:13px; color:var(--mid); line-height:1.6;">定位框架 · Messaging · 品牌叙事</div>
-        </div>
-        <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
-          <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">内容与 SEO/GEO</div>
-          <div style="font-size:13px; color:var(--mid); line-height:1.6;">SEO · GEO · 内容营销 · 社媒</div>
-        </div>
-        <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
-          <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">获客与增长</div>
-          <div style="font-size:13px; color:var(--mid); line-height:1.6;">邮件营销 · Outbound · PLG</div>
-        </div>
-        <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
-          <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">销售与渠道</div>
-          <div style="font-size:13px; color:var(--mid); line-height:1.6;">销售策略 · 渠道合作 · ABM</div>
-        </div>
-        <div style="background:var(--white); padding:20px; border:1px solid var(--border);">
-          <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); margin-bottom:8px;">工具与模板</div>
-          <div style="font-size:13px; color:var(--mid); line-height:1.6;">GTM模板 · AI工具 · 书籍推荐</div>
-        </div>
+      <div style="background:var(--cream); padding:20px 22px; border-left: 3px solid var(--gold);">
+        <div style="font-size:13px; font-weight:700; color:var(--black); margin-bottom:6px;">PMF</div>
+        <div style="font-size:12px; color:var(--mid);">产品与市场匹配验证</div>
+      </div>
+      <div style="background:var(--cream); padding:20px 22px; border-left: 3px solid var(--gold);">
+        <div style="font-size:13px; font-weight:700; color:var(--black); margin-bottom:6px;">产品定位</div>
+        <div style="font-size:12px; color:var(--mid);">Positioning · Messaging</div>
+      </div>
+      <div style="background:var(--cream); padding:20px 22px; border-left: 3px solid var(--gold);">
+        <div style="font-size:13px; font-weight:700; color:var(--black); margin-bottom:6px;">SEO / GEO</div>
+        <div style="font-size:12px; color:var(--mid);">搜索优化 · AI推荐优化</div>
+      </div>
+      <div style="background:var(--cream); padding:20px 22px; border-left: 3px solid var(--gold);">
+        <div style="font-size:13px; font-weight:700; color:var(--black); margin-bottom:6px;">社交媒体</div>
+        <div style="font-size:12px; color:var(--mid);">LinkedIn · X · 小红书</div>
+      </div>
+      <div style="background:var(--cream); padding:20px 22px; border-left: 3px solid var(--gold);">
+        <div style="font-size:13px; font-weight:700; color:var(--black); margin-bottom:6px;">渠道开拓</div>
+        <div style="font-size:12px; color:var(--mid);">合作 · 分销 · ABM</div>
       </div>
     </div>
+
   </div>
 </section>
 
