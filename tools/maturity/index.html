@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企业 AI 营销成熟度诊断</title>
+  <script src="../lib/chart.umd.js"></script>
+  <style>
+    :root {
+      --primary: #3b5bdb;
+      --primary-light: #eef2ff;
+      --accent: #7048e8;
+      --success: #2f9e44;
+      --warn: #f08c00;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #1a1d23;
+      --muted: #6c757d;
+      --border: #eaecf2;
+      --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 8px 28px rgba(59,91,219,0.07);
+      --shadow-lg: 0 2px 6px rgba(16,24,40,0.05), 0 18px 48px rgba(59,91,219,0.12);
+      --grad: linear-gradient(135deg, #3b5bdb 0%, #6741d9 55%, #7048e8 100%);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(1100px 560px at 8% -8%, rgba(112,72,232,0.07), transparent 60%),
+        radial-gradient(1000px 520px at 102% 2%, rgba(59,91,219,0.07), transparent 55%),
+        var(--bg);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── 顶部 ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(620px 320px at 14% -10%, rgba(255,255,255,0.22), transparent 60%),
+        radial-gradient(520px 300px at 96% 16%, rgba(255,255,255,0.14), transparent 55%),
+        var(--grad);
+      color: white;
+      padding: 2.9rem 2rem 2.6rem;
+      text-align: center;
+      border-radius: 0 0 28px 28px;
+      box-shadow: 0 14px 40px rgba(59,91,219,0.22);
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.10) 1px, transparent 1.4px);
+      background-size: 22px 22px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(6px);
+      border-radius: 20px;
+      padding: 0.32rem 1rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+    .hero h1 { font-size: 1.85rem; font-weight: 700; margin-bottom: 0.6rem; }
+    .hero p  { opacity: 0.85; font-size: 0.95rem; line-height: 1.7; max-width: 560px; margin: 0 auto; }
+
+    /* ── 步骤进度 ── */
+    .steps-wrap { max-width: 880px; margin: 1.6rem auto 0; padding: 0 1.5rem; }
+    .steps {
+      display: flex; justify-content: space-between;
+      position: relative; margin-bottom: 0.4rem;
+    }
+    .steps::before {
+      content: ''; position: absolute; top: 16px; left: 6%; right: 6%;
+      height: 2px; background: var(--border); z-index: 0;
+    }
+    .step-node { position: relative; z-index: 1; text-align: center; flex: 1; }
+    .step-dot {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: white; border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700; color: var(--muted);
+      margin: 0 auto 0.4rem; transition: all 0.25s;
+    }
+    .step-node.active .step-dot { background: var(--grad); border-color: transparent; color: white; box-shadow: 0 6px 16px rgba(112,72,232,0.42); transform: scale(1.06); }
+    .step-node.done .step-dot { background: #ebfbee; border-color: #b2f2bb; color: var(--success); }
+    .step-label { font-size: 0.72rem; color: var(--muted); }
+    .step-node.active .step-label { color: var(--primary); font-weight: 600; }
+
+    .progress-bar { height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; margin-top: 0.7rem; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #3b5bdb, #7048e8); border-radius: 99px; transition: width 0.4s ease; width: 0%; }
+
+    /* ── 主体 ── */
+    main { max-width: 880px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    .section-card {
+      background: var(--card); border-radius: 20px; box-shadow: var(--shadow);
+      padding: 2rem; margin-bottom: 1.5rem; border: 1px solid var(--border);
+    }
+    .section-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+    .section-title { font-size: 1.18rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.6rem; }
+    .section-title .ico { width: 32px; height: 32px; border-radius: 10px; background: var(--grad); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; box-shadow: 0 4px 12px rgba(112,72,232,0.32); }
+    .section-desc { font-size: 0.85rem; color: var(--muted); margin-top: 0.6rem; line-height: 1.6; }
+    .example {
+      font-size: 0.78rem; color: #5c7cfa; background: #f3f6ff;
+      border-left: 3px solid #91a7ff; border-radius: 0 8px 8px 0;
+      padding: 0.5rem 0.8rem; margin-top: 0.7rem; line-height: 1.6;
+    }
+
+    /* ── 表单 ── */
+    .field { margin-bottom: 1.3rem; }
+    .field:last-child { margin-bottom: 0; }
+    .field label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .field label .req { color: #e03131; margin-left: 2px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 0.7rem 0.9rem; border: 1.5px solid var(--border);
+      border-radius: 10px; font-size: 0.9rem; font-family: inherit; background: white;
+      transition: border 0.2s; color: var(--text);
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--primary); }
+    .field textarea { resize: vertical; min-height: 64px; }
+    .field .hint { font-size: 0.75rem; color: #adb5bd; margin-top: 0.35rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem; }
+    @media(max-width:600px){ .grid-2{ grid-template-columns:1fr; gap:0;} .grid-2 .field{ margin-bottom:1.3rem;} }
+
+    /* ── 评分题 ── */
+    .question-item { margin-bottom: 1.5rem; padding-bottom: 1.3rem; border-bottom: 1px dashed var(--border); }
+    .question-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .q-label { font-size: 0.92rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .q-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--primary-light); color: var(--primary); border-radius: 6px; font-size: 0.72rem; font-weight: 700; margin-right: 0.5rem; }
+    .q-sub { font-size: 0.78rem; color: var(--muted); margin: 0.2rem 0 0.7rem 0; line-height: 1.55; }
+    .score-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .score-btn {
+      width: 44px; height: 44px; border-radius: 10px; border: 1.5px solid var(--border);
+      background: white; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: all 0.18s; color: var(--muted); display: flex; align-items: center; justify-content: center;
+    }
+    .score-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+    .score-btn.selected { background: var(--grad); border-color: transparent; color: white; box-shadow: 0 6px 16px rgba(112,72,232,0.4); transform: translateY(-2px) scale(1.06); }
+    .score-hint { display: flex; justify-content: space-between; gap: 0.4rem; font-size: 0.72rem; color: #adb5bd; margin-top: 0.45rem; max-width: 340px; }
+    .score-hint span:nth-child(2){ text-align: center; }
+    .score-hint span:last-child{ text-align: right; }
+
+    /* ── 场景选择 ── */
+    .chips { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.3rem; }
+    .chip {
+      padding: 0.6rem 1rem; border-radius: 12px; border: 1.5px solid var(--border);
+      background: white; font-size: 0.85rem; cursor: pointer; transition: all 0.18s; user-select: none;
+      display: flex; align-items: center; gap: 0.4rem;
+    }
+    .chip:hover { border-color: var(--accent); }
+    .chip.selected { background: var(--grad); color: white; border-color: transparent; box-shadow: 0 5px 16px rgba(112,72,232,0.32); transform: translateY(-1px); }
+    .chip.disabled { opacity: 0.4; cursor: not-allowed; }
+    .chip.mini { padding: 0.42rem 0.85rem; font-size: 0.82rem; border-radius: 10px; }
+    .chip .num { font-size: 0.7rem; background: rgba(255,255,255,0.25); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+    .chips-counter { font-size: 0.8rem; color: var(--muted); margin-top: 0.8rem; }
+    .chips-counter b { color: var(--primary); }
+
+    /* ── 版本选择 ── */
+    .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media(max-width:600px){ .mode-grid{ grid-template-columns:1fr; } }
+    .mode-card {
+      border: 1.5px solid var(--border); border-radius: 14px; padding: 1.6rem 1.4rem;
+      cursor: pointer; transition: all 0.2s; background: white;
+    }
+    .mode-card:hover { border-color: var(--accent); box-shadow: 0 8px 24px rgba(112,72,232,0.14); transform: translateY(-2px); }
+    .mode-emoji { font-size: 2rem; margin-bottom: 0.6rem; }
+    .mode-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .mode-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.9rem; }
+    .mode-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+    .mode-tags span { font-size: 0.72rem; background: var(--primary-light); color: var(--primary); border-radius: 6px; padding: 0.25rem 0.6rem; }
+    .mode-go { font-size: 0.88rem; font-weight: 700; color: var(--accent); }
+
+    /* ── 操作按钮 ── */
+    .actions { display: flex; gap: 1rem; justify-content: space-between; margin-top: 0.5rem; }
+    .btn { padding: 0.75rem 1.9rem; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.22s cubic-bezier(.4,0,.2,1); }
+    .btn-outline { background: white; border: 1.5px solid var(--border); color: var(--muted); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); box-shadow: 0 4px 14px rgba(59,91,219,0.1); }
+    .btn-primary { background: var(--grad); color: white; box-shadow: 0 8px 20px rgba(112,72,232,0.36); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(112,72,232,0.45); }
+
+    /* ── 报告页 ── */
+    .report-banner {
+      background:
+        radial-gradient(520px 280px at 90% -20%, rgba(255,255,255,0.18), transparent 60%),
+        var(--grad);
+      color: white;
+      border-radius: 22px; padding: 2.2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden;
+      box-shadow: 0 16px 44px rgba(112,72,232,0.28);
+    }
+    .report-banner::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.09) 1px, transparent 1.4px); background-size: 22px 22px; opacity: 0.5; }
+    .report-banner::after { content: ''; position: absolute; right: -50px; top: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.09); border-radius: 50%; }
+    .rb-level-tag { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.25); border-radius: 20px; padding: 0.3rem 1rem; font-size: 0.8rem; margin-bottom: 0.8rem; position: relative; z-index: 1; }
+    .rb-level { font-size: 2.1rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.01em; position: relative; z-index: 1; }
+    .rb-desc { font-size: 0.9rem; opacity: 0.9; line-height: 1.7; max-width: 600px; position: relative; z-index: 1; }
+    .rb-scores { display: flex; gap: 2.5rem; margin-top: 1.4rem; position: relative; z-index: 1; }
+    .rb-score .v { font-size: 1.8rem; font-weight: 800; }
+    .rb-score .l { font-size: 0.78rem; opacity: 0.8; }
+
+    .report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media(max-width:640px){ .report-grid{ grid-template-columns:1fr; } }
+    .radar-card { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 1.4rem; border: 1px solid var(--border); }
+    .radar-card h3 { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.8rem; text-align: center; }
+    .radar-card canvas { display: block; margin: 0 auto; }
+
+    .report-block { background: var(--card); border-radius: 18px; box-shadow: var(--shadow); padding: 1.6rem; border: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .report-block h3 { font-size: 1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .report-block h3 .em { font-size: 1.1rem; }
+
+    .tl-item { display: flex; gap: 0.8rem; padding: 0.7rem 0.9rem; border-radius: 10px; margin-bottom: 0.7rem; font-size: 0.86rem; line-height: 1.6; }
+    .tl-item:last-child { margin-bottom: 0; }
+    .tl-good { background: #ebfbee; color: #2b8a3e; }
+    .tl-bad  { background: #fff4e6; color: #d9480f; }
+    .tl-item .ic { font-weight: 800; flex-shrink: 0; }
+
+    /* ── 成熟度阶梯 ── */
+    .ladder { display: flex; gap: 0.3rem; position: relative; margin: 0.3rem 0 1.1rem; }
+    .ladder-node { flex: 1; text-align: center; position: relative; }
+    .ladder-node:not(:last-child)::after { content: ''; position: absolute; top: 18px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
+    .ladder-dot { width: 38px; height: 38px; border-radius: 50%; margin: 0 auto 0.45rem; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; background: #fff; border: 2px solid var(--border); color: var(--muted); position: relative; z-index: 1; transition: all 0.25s; }
+    .ladder-name { font-size: 0.7rem; color: var(--muted); line-height: 1.3; }
+    .ladder-node.past .ladder-dot { background: #d0ebff; border-color: #a5d8ff; color: #1971c2; }
+    .ladder-node.past::after { background: #a5d8ff; }
+    .ladder-node.cur .ladder-dot { background: var(--grad); border-color: transparent; color: #fff; box-shadow: 0 6px 16px rgba(112,72,232,0.42); transform: scale(1.14); }
+    .ladder-node.cur .ladder-name { color: var(--primary); font-weight: 700; }
+    .ladder-goal { background: var(--primary-light); border-radius: 12px; padding: 0.9rem 1.1rem; font-size: 0.85rem; line-height: 1.7; color: #3b4a6b; }
+    .ladder-goal b { color: var(--primary); }
+
+    /* ── 得分柱状条 ── */
+    .bar-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.95rem; }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-name { font-size: 0.8rem; width: 84px; flex-shrink: 0; color: var(--text); line-height: 1.3; }
+    .bar-track { flex: 1; height: 9px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 99px; transition: width 0.8s cubic-bezier(.4,0,.2,1); }
+    .bar-val { font-size: 0.82rem; font-weight: 700; width: 20px; text-align: right; }
+    .bar-legend { font-size: 0.74rem; color: var(--muted); margin-top: 1rem; line-height: 1.7; border-top: 1px dashed var(--border); padding-top: 0.8rem; }
+    .bar-legend i { font-style: normal; margin-right: 0.2rem; }
+
+    .scene-rec { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.9rem 1rem; border-radius: 12px; background: var(--primary-light); margin-bottom: 0.8rem; }
+    .scene-rec:last-child { margin-bottom: 0; }
+    .scene-rec .rank { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#3b5bdb,#7048e8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+    .scene-rec .sn { font-size: 0.9rem; font-weight: 700; }
+    .scene-rec .sr { font-size: 0.79rem; color: var(--muted); margin-top: 0.2rem; line-height: 1.55; }
+    .scene-defer { display: inline-block; font-size: 0.82rem; background: #f1f3f5; color: #868e96; border-radius: 8px; padding: 0.4rem 0.8rem; margin: 0.3rem 0.4rem 0 0; }
+
+    .action-item { display: flex; gap: 0.8rem; padding: 0.6rem 0; border-bottom: 1px dashed var(--border); font-size: 0.88rem; line-height: 1.65; }
+    .action-item:last-child { border-bottom: none; }
+    .action-item .wk { flex-shrink: 0; font-size: 0.74rem; font-weight: 700; color: var(--accent); background: #f3f0ff; border-radius: 6px; padding: 0.15rem 0.5rem; height: fit-content; white-space: nowrap; }
+
+    .meta-line { font-size: 0.82rem; color: var(--muted); line-height: 1.8; }
+    .meta-line b { color: var(--text); }
+
+    .report-footer { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+    @media print {
+      .hero, .steps-wrap, .report-footer { display: none !important; }
+      body { background: white; }
+      .report-block, .radar-card, .report-banner { box-shadow: none; break-inside: avoid; }
+    }
+
+    .fade-in { animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @media(max-width:520px){ .hero h1{ font-size:1.4rem; } .step-label{ display:none; } .actions{ flex-direction:column-reverse; } .btn{ width:100%; } }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">AI 营销公开课 · 现场诊断工具</div>
+  <h1>企业 AI 营销成熟度诊断</h1>
+  <p>用 5 分钟，从「营销基础」与「AI 应用」两条线，定位你所在的成熟度阶段，并生成一份可带走的诊断报告。</p>
+</div>
+
+<div class="steps-wrap">
+  <div class="steps" id="steps"></div>
+  <div class="progress-bar"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<main id="app"></main>
+
+<script>
+// ─────────────────────────────────────────
+// 配置
+// ─────────────────────────────────────────
+const STEP_NAMES = ['基本信息', '营销现状', 'AI应用情况', '机会识别', '诊断报告'];
+const PERSON_STEP_NAMES = ['基本信息', '个人AI能力', '机会识别', '成长报告'];
+
+const INDUSTRIES = ['SaaS / 软件', '制造业 / 工业品', '消费品 / 零售', '专业服务 / 咨询', '教育培训', '金融 / 保险', '医疗健康', '互联网 / 平台', '其他'];
+const SIZES = ['1-50 人', '51-200 人', '201-1000 人', '1000 人以上'];
+const ROLES = ['市场负责人 / CMO', '市场经理 / 主管', '内容 / 品牌', '增长 / 运营', '销售 / SDR', '创始人 / 高管', '其他'];
+const GOALS = ['业务增长', '获客 / 线索', '产品上线', '提升品牌认知', '提高转化率', '大客户孵化', '私域 / 复购', '降本提效', '其他'];
+const PAIN_PRESETS = ['内容产出慢', '线索质量差', '转化率低', '获客成本高', '缺乏数据沉淀', '人手不足', '不知 AI 从何下手', '渠道效果差', '团队效率低'];
+const WORK_PRESETS = ['内容创作', '社媒 / 公众号', '短视频 / 直播', '活动策划', '品牌 / 设计', '私域 / 社群', '线索 / 获客', '销售支持', '数据分析', '投放 / SEM'];
+const WISH_PRESETS = ['内容产出慢', '选题没灵感', '文案质量不稳', '做图 / 做视频慢', '不会写 Prompt', '重复工作太多', '数据分析费时', '想做小工具但不会'];
+
+// 营销基础 6 项
+const BASE_ITEMS = [
+  { key:'cust',    name:'目标客户清晰度', sub:'能否清晰定义理想客户画像（ICP）：行业、规模、决策角色、典型场景与购买动机，并据此做客户分层与优先级。', low:'说不清卖给谁', mid:'大致知道没分层', high:'有清晰 ICP 与分层' },
+  { key:'value',   name:'价值主张清晰度', sub:'能否一句话讲清差异化价值——为什么是我们、对客户意味着什么收益，而不是罗列功能或与对手雷同。', low:'卖点模糊雷同', mid:'能说但不够锋利', high:'差异化价值锋利' },
+  { key:'content', name:'内容资产沉淀',   sub:'是否有体系化、可复用、可检索的内容库（案例、白皮书、话术、素材模板），而非每次都从零开始做。', low:'内容散乱临时做', mid:'有积累难复用', high:'体系化可复用' },
+  { key:'channel', name:'渠道效率判断',   sub:'是否清楚每个渠道的获客成本与转化效率，并据此动态分配预算，而不是平均撒网、凭感觉投放。', low:'凭感觉撒网', mid:'看数据但不细', high:'按 ROI 精准分配' },
+  { key:'convert', name:'销售转化流程',   sub:'从线索到成交是否有清晰的阶段定义、MQL/SQL 标准、跟进节奏与市场销售协同机制（SLA）。', low:'流程随意断点多', mid:'有流程但不严', high:'流程清晰可追踪' },
+  { key:'data',    name:'数据反馈机制',   sub:'是否有固定的指标看板与复盘节奏，能从数据中发现问题、定位原因并驱动下一步动作，形成闭环。', low:'几乎不看数据', mid:'定期看少行动', high:'数据驱动迭代' },
+];
+
+// AI 应用 6 项
+const AI_ITEMS = [
+  { key:'freq',  name:'AI 使用频率',  sub:'团队把 AI 当作日常生产力工具的程度——是偶尔尝鲜，还是已成为多数营销任务的默认起点。', low:'几乎不用', mid:'每周用几次', high:'每天高频使用' },
+  { key:'prompt',name:'Prompt 能力',  sub:'能否写出带角色、上下文、示例、输出格式约束的结构化提示词，稳定拿到可直接用的结果，而非反复试。', low:'只会简单提问', mid:'会给上下文示例', high:'能设计复杂提示词' },
+  { key:'flow',  name:'AI 工作流',    sub:'是否把 AI 嵌入固定流程（如"选题→初稿→审核→排版"每步都有明确 AI 介入点），而非临时想起才用。', low:'临时零散使用', mid:'部分步骤固定', high:'已沉淀工作流' },
+  { key:'share', name:'团队共享',     sub:'好用的提示词、模板、最佳实践是否被沉淀进共享库并持续迭代，而非散落在个人脑子和聊天记录里。', low:'各用各的', mid:'偶尔互相参考', high:'团队共享复用' },
+  { key:'review',name:'结果审核',     sub:'对 AI 输出是否有事实核查、品牌口径、合规把关的标准与流程，避免"直接拿来发"导致出错。', low:'直接拿来用', mid:'凭经验粗看', high:'有审核标准与流程' },
+  { key:'tool',  name:'工具化能力',   sub:'能否把高频、规则清晰的任务封装成可复用的工具 / GPTs / Agent，让不会写提示词的人也能一键用。', low:'完全手动', mid:'套用固定模板', high:'已做成工具/Agent' },
+];
+
+// 机会识别 — 文本题
+const OPP_FIELDS = [
+  { key:'repeat',  q:'最重复的营销任务',       opts:['公众号 / 推文','海报 / 物料','短视频 / 口播','周报 / 月报','社群消息','活动通知','朋友圈文案'] },
+  { key:'time',    q:'最耗时间的营销任务',     opts:['竞品调研','市场分析','活动方案','客户案例','内容选题','数据报表','视频剪辑'] },
+  { key:'unstable',q:'输出质量最不稳定的任务', opts:['销售话术','营销文案','内容选题','客户回复','活动创意','配图设计'] },
+  { key:'person',  q:'最依赖个人经验的任务',   opts:['选题判断','客户洞察','文案手感','渠道选择','活动策划','视觉审美'] },
+  { key:'weekly',  q:'每周都会发生的任务',     opts:['周报','社群运营','线索跟进','内容更新','数据复盘','海报产出'] },
+  { key:'io',      q:'有清晰输入输出的任务',   opts:['资料 → 推文','产品 → 话术','需求 → 海报','数据 → 报告','要点 → 视频脚本'] },
+  { key:'lowrisk', q:'出错风险较低的任务',     opts:['初稿生成','资料汇总','文案改写','翻译','格式整理','配图生成'] },
+];
+
+// 机会识别 — 场景 (difficulty 1易~5难)
+const SCENARIOS = [
+  { key:'market',  name:'市场机会分析',        diff:3 },
+  { key:'insight', name:'客户洞察分析',        diff:3 },
+  { key:'compete', name:'竞争分析',            diff:2 },
+  { key:'content', name:'内容选题与内容策略',  diff:1 },
+  { key:'image',   name:'AI 图片 / 海报生成',  diff:1 },
+  { key:'video',   name:'AI 视频 / 口播生成',  diff:2 },
+  { key:'campaign',name:'活动策划与转化设计',  diff:3 },
+  { key:'sales',   name:'销售话术与线索跟进',  diff:2 },
+  { key:'private', name:'私域运营',            diff:3 },
+  { key:'repurch', name:'客户复购与召回',      diff:4 },
+  { key:'review',  name:'营销数据复盘',        diff:4 },
+  { key:'agent',   name:'Agent / 小工具原型',  diff:5 },
+];
+
+// 场景推荐理由
+const SCENE_REASON = {
+  content:'输入输出清晰、出错风险低，是最容易看到效果的 AI 切入点。',
+  image:'海报、配图等素材类需求高频且出错风险低，用 AI 文生图能立刻提效。',
+  video:'用 AI 生成口播脚本、数字人或短视频，快速放大内容产能、降低制作门槛。',
+  compete:'基于公开信息整合，AI 擅长且容易上手，可快速产出结构化结论。',
+  sales:'话术类任务高频且有明确套路，AI 能稳定生成初稿、释放销售时间。',
+  market:'需要信息整合与判断，适合用 AI 做第一版分析草稿再人工校准。',
+  insight:'让 AI 从反馈、评论、访谈中提炼客户洞察，提升判断效率。',
+  campaign:'活动策划环节多，AI 可辅助生成方案框架与转化路径设计。',
+  private:'私域内容与 SOP 重复度高，适合用 AI 批量生成与个性化改写。',
+  repurch:'依赖客户数据与分层，建议在数据反馈机制成熟后再优先推进。',
+  review:'数据复盘对数据基础与口径要求高，建议先打好数据底座。',
+  agent:'做成 Agent / 小工具是最高阶玩法，需要稳定工作流与工具化能力支撑。',
+};
+
+// ── 个人版：个人 AI 营销成熟度 6 维度 ──
+const PERSON_ITEMS = [
+  { key:'pfreq',   name:'AI 使用频率', sub:'你个人日常营销工作中使用 AI 的频繁程度——是偶尔想起，还是已成为多数任务的默认起点。', low:'几乎不用', mid:'每周用几次', high:'每天高频使用' },
+  { key:'pprompt', name:'Prompt 能力', sub:'能否写出带角色、上下文、示例、输出格式的结构化提示词，稳定拿到可直接用的结果，而非反复试。', low:'只会简单提问', mid:'会给上下文示例', high:'能设计复杂提示词' },
+  { key:'pbreadth',name:'AI 工具广度', sub:'你用过几类 AI 工具：写作 / 图片 / 视频 / 数据分析 / Agent 自动化——掌握得越多，组合能力越强。', low:'只用过 1 类', mid:'用过 2-3 类', high:'多类组合自如' },
+  { key:'pcover',  name:'任务覆盖度', sub:'你手头的营销任务中，有多大比例已经交给 AI 来做或辅助，而不是全靠手动。', low:'几乎全手动', mid:'部分任务用 AI', high:'多数任务用 AI' },
+  { key:'pjudge',  name:'结果判断力', sub:'能否判断 AI 产出的好坏，并做事实核查、品牌口径校准与二次加工，让它达到可用标准。', low:'好坏分不清', mid:'看得出明显问题', high:'能判断并优化' },
+  { key:'plearn',  name:'学习与分享', sub:'是否持续学习 AI 新玩法，并主动把好用法分享、带动同事一起用，而非被动等安排。', low:'被动等安排', mid:'自己学不带人', high:'主动学并带人' },
+];
+const PERSON_LEVELS = {
+  L1: { tag:'L1', name:'观察者',     color:'#868e96', desc:'你还在观望期，AI 基本没进入日常工作。好消息是起步极简单——选 1 个你最常做的任务，今天就用 AI 跑一遍初稿，先建立"AI 能帮上忙"的体感。', goal:'选 1 个高频任务用 AI 跑顺，开始养成日常使用习惯。' },
+  L2: { tag:'L2', name:'尝鲜者',     color:'#1c7ed6', desc:'你已经在零散地用 AI，但还没形成习惯。重点是把 1-2 个高频任务用 AI 跑顺，并开始积累属于自己的提示词库。', goal:'把零散用法固化成稳定的个人工作流，并扩大 AI 覆盖的任务范围。' },
+  L3: { tag:'L3', name:'熟练使用者', color:'#7048e8', desc:'你已能稳定用 AI 完成多类任务。重点是把零散用法固化成个人工作流，提升产出的稳定性与质量，而不是每次重新摸索。', goal:'把你的方法做成模板 / SOP，分享并带动至少 1-2 位同事一起用。' },
+  L4: { tag:'L4', name:'AI 达人',    color:'#2f9e44', desc:'你已是团队里的 AI 高手，不仅自己用得好，还能把方法沉淀、分享、带动同事。重点是把个人经验做成可复制的模板与 SOP，放大影响力。', goal:'把最常重复的任务做成小工具 / Agent，让团队一键复用。' },
+  L5: { tag:'L5', name:'工具构建者', color:'#e8590c', desc:'你已能把重复任务做成工具 / Agent，是团队的 AI 杠杆点。重点是搭建可复用的小工具，把个人产能变成团队产能。', goal:'持续打磨工具、扩大影响，成为团队 AI 应用的标杆与推动者。' },
+};
+const PERSON_ADVICE = {
+  pfreq:   { s:'用得勤、习惯已养成，这是最难得的起点，适合往工作流与工具化进阶。', w:'使用频率低；从 1 个你每天/每周都做的任务开始，强制自己先用 AI 出初稿。' },
+  pprompt: { s:'提示词能力强、能稳定拿到好结果，这是你最值钱的个人技能。', w:'提示词偏简单；套用"角色+上下文+示例+输出格式"四件套，产出立刻更稳。' },
+  pbreadth:{ s:'工具广度好，能按任务选对工具、组合出更强效果。', w:'工具较单一；建议补上图片/视频/数据其中 1 类，拓宽你能接的活。' },
+  pcover:  { s:'多数任务已用 AI，效率红利吃得很足。', w:'任务覆盖低；列出你手头任务，挑 3 个"重复+清晰"的优先交给 AI。' },
+  pjudge:  { s:'判断力强，能把 AI 初稿改到可用、不踩坑，这是规模化用 AI 的关键。', w:'判断力待加强；建一个"发布前核查清单"，避免直接拿 AI 产出去用。' },
+  plearn:  { s:'持续学、主动分享，你正在成为团队的 AI 带动者。', w:'学习偏被动；每周花 30 分钟学 1 个新玩法，并分享给 1 位同事。' },
+};
+
+const LEVELS = {
+  L1: { tag:'L1', name:'AI 营销观察期', color:'#868e96', desc:'AI 还几乎没进入营销工作。好消息是起步极简单——先选 1-2 件最简单的事用 AI 跑通（一篇推文初稿、一张海报），建立"AI 真能省时间"的体感，再谈推广。', goal:'选 1-2 个简单任务用 AI 跑顺，先把使用习惯养起来。' },
+  L2: { tag:'L2', name:'自发探索期',   color:'#1c7ed6', desc:'AI 还停留在个别同事的自发探索，没形成统一打法。重点是把一两个高频任务用 AI 跑顺，并开始沉淀好用的提示词。', goal:'把零散的个人尝试收敛成 2-3 个明确场景的试点，做出可复用的成果。' },
+  L3: { tag:'L3', name:'场景试点期',   color:'#7048e8', desc:'AI 应用已经起步，具备做场景试点的条件。重点是选 2-3 个明确场景做出可复用的成果，并开始沉淀提示词与流程。', goal:'把验证过的场景固化进团队工作流，开始共享提示词与统一标准。' },
+  L4: { tag:'L4', name:'流程嵌入期',   color:'#2f9e44', desc:'你已经把 AI 嵌入到团队工作流并开始共享沉淀。重点是把单点能力标准化、流程化，让更多人稳定复用。', goal:'把最稳定的工作流做成 Agent / 小工具，实现自动化、放大团队产能。' },
+  L5: { tag:'L5', name:'Agent 化推进期',color:'#e8590c', desc:'你处在最前沿阶段，已具备把重复任务做成 Agent / 小工具的能力。重点是搭建可自运行的营销 Agent，放大杠杆。', goal:'持续扩大 Agent 覆盖面，把更多营销环节交给可自运行的工具，沉淀为组织资产。' },
+};
+
+// ─────────────────────────────────────────
+// 状态
+// ─────────────────────────────────────────
+let step = 0;
+const blankInfo = () => ({ industry:'', size:'', role:'', goals:[], pain:{tags:[],text:''}, work:{tags:[],text:''}, wish:{tags:[],text:''} });
+const blankOpp  = () => OPP_FIELDS.reduce((o,f)=>(o[f.key]={tags:[],text:''},o),{});
+const blankScore = items => items.reduce((o,i)=>(o[i.key]=0,o),{});
+const state = {
+  mode: null,            // 'company' | 'personal'
+  info: blankInfo(),
+  base: blankScore(BASE_ITEMS),
+  ai:   blankScore(AI_ITEMS),
+  person: blankScore(PERSON_ITEMS),
+  opp:  blankOpp(),
+  scenes: [],
+};
+// 标签+补充 → 字符串
+const flatten = o => [...o.tags, o.text.trim()].filter(Boolean).join('、');
+
+// ─────────────────────────────────────────
+// 渲染框架
+// ─────────────────────────────────────────
+function stepNames(){ return state.mode==='personal' ? PERSON_STEP_NAMES : STEP_NAMES; }
+
+function renderSteps() {
+  const names = stepNames();
+  document.getElementById('steps').innerHTML = names.map((n,i)=>{
+    const cls = i===step ? 'active' : i<step ? 'done' : '';
+    return `<div class="step-node ${cls}">
+      <div class="step-dot">${i<step ? '✓' : i+1}</div>
+      <div class="step-label">${n}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('prog-fill').style.width = (step/(names.length-1)*100) + '%';
+}
+
+function render(scroll) {
+  const app = document.getElementById('app');
+  const stepsWrap = document.querySelector('.steps-wrap');
+  // 版本选择页
+  if (!state.mode) {
+    stepsWrap.style.display = 'none';
+    app.innerHTML = renderModeSelect();
+    bindStep();
+    if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  stepsWrap.style.display = '';
+  renderSteps();
+  if (state.mode === 'personal') {
+    if (step===0) app.innerHTML = renderPersonInfo();
+    else if (step===1) app.innerHTML = renderScore('person', PERSON_ITEMS, '个人 AI 营销成熟度评分', '🧑‍💻', '评估你个人当前真实的 AI 营销能力——是"现在已经做到的"，不是"理想中"。1 分=完全不符合，5 分=完全符合。', '②');
+    else if (step===2) app.innerHTML = renderOpp();
+    else if (step===3) { app.innerHTML = renderPersonReport(); drawPersonRadar(); }
+  } else {
+    if (step===0) app.innerHTML = renderInfo();
+    else if (step===1) app.innerHTML = renderScore('base', BASE_ITEMS, '营销基础成熟度评分', '🎯', '评估你们营销体系的"地基"。请按真实情况打分，1 分=完全不符合，5 分=完全符合。', '②');
+    else if (step===2) app.innerHTML = renderScore('ai', AI_ITEMS, 'AI 使用成熟度评分', '🤖', '评估团队当前真实的 AI 应用水平，不是"理想中"而是"现在已经做到的"。', '③');
+    else if (step===3) app.innerHTML = renderOpp();
+    else if (step===4) { app.innerHTML = renderReport(); drawRadars(); }
+  }
+  bindStep();
+  if (scroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 版本选择
+function renderModeSelect() {
+  return `<div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title"><span class="ico">★</span>选择评估版本</div>
+      <div class="section-desc">两种版本，按使用场景选择。培训现场建议先做<b>企业版</b>；带回去给同事，让每个人各做一份<b>个人版</b>。</div>
+    </div>
+    <div class="mode-grid">
+      <div class="mode-card" data-mode="company">
+        <div class="mode-emoji">🏢</div>
+        <div class="mode-name">企业 / 团队版</div>
+        <div class="mode-desc">评估公司整体的营销基础与团队 AI 应用水平，输出组织成熟度等级（L1–L5）与团队行动建议。代表公司 / 团队填写一份。</div>
+        <div class="mode-tags"><span>营销基础 6 项</span><span>团队 AI 6 项</span><span>组织诊断报告</span></div>
+        <div class="mode-go">开始企业诊断 →</div>
+      </div>
+      <div class="mode-card" data-mode="personal">
+        <div class="mode-emoji">🧑‍💻</div>
+        <div class="mode-name">个人版</div>
+        <div class="mode-desc">评估你个人的 AI 营销能力，输出个人成熟度等级（观察者 → 工具构建者）与 30 天个人成长建议。适合每位同事各填一份。</div>
+        <div class="mode-tags"><span>个人 AI 6 项</span><span>机会识别</span><span>个人成长报告</span></div>
+        <div class="mode-go">开始个人诊断 →</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// 单选标签组
+function pillGroup(field, options) {
+  return `<div class="chips">${options.map(o=>
+    `<div class="chip mini ${state.info[field]===o?'selected':''}" data-pick="${field}" data-val="${o}">${o}</div>`
+  ).join('')}</div>`;
+}
+// 多选标签组（限选 max 个）— goals / scenes
+function limitGroup(lim, items, max) {
+  const arr = lim==='goals' ? state.info.goals : state.scenes;
+  const inner = items.map(it=>{
+    const key = it.key||it, name = it.name||it;
+    const on = arr.includes(key), full = arr.length>=max && !on;
+    return `<div class="chip ${lim==='goals'?'mini':''} ${on?'selected':''} ${full?'disabled':''}" data-lim="${lim}" data-limkey="${key}">${on?'<span class="num">'+(arr.indexOf(key)+1)+'</span>':''}${name}</div>`;
+  }).join('');
+  return `<div class="chips" data-limgroup="${lim}" data-max="${max}">${inner}</div>`;
+}
+// 原地刷新限选组（不重渲染，避免闪动）
+function refreshLimit(group) {
+  const lim = group.dataset.limgroup, max = +group.dataset.max;
+  const arr = lim==='goals' ? state.info.goals : state.scenes;
+  group.querySelectorAll('[data-lim]').forEach(c=>{
+    const k = c.dataset.limkey, on = arr.includes(k), full = arr.length>=max && !on;
+    c.classList.toggle('selected', on);
+    c.classList.toggle('disabled', full);
+    let badge = c.querySelector('.num');
+    if (on) { if(!badge){ badge=document.createElement('span'); badge.className='num'; c.prepend(badge); } badge.textContent = arr.indexOf(k)+1; }
+    else if (badge) badge.remove();
+  });
+  const counter = group.parentElement.querySelector('[data-counter]');
+  if (counter) counter.textContent = arr.length;
+}
+// 多选标签 + 补充输入
+function tagField(scope, key, label, options, placeholder) {
+  const obj = (scope==='info'?state.info:state.opp)[key];
+  const chips = options.map(o=>
+    `<div class="chip mini ${obj.tags.includes(o)?'selected':''}" data-tag="${key}" data-scope="${scope}" data-val="${o}">${o}</div>`
+  ).join('');
+  return `<div class="field">
+    <label>${label}</label>
+    <div class="chips" style="margin-bottom:0.6rem">${chips}</div>
+    <input type="text" data-text="${key}" data-scope="${scope}" value="${obj.text.replace(/"/g,'&quot;')}" placeholder="${placeholder}">
+  </div>`;
+}
+
+// ── Step 1：基本信息 ──
+function renderInfo() {
+  return `<div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title"><span class="ico">①</span>基本信息</div>
+      <div class="section-desc">点选即可，无需下拉。先了解你的背景，让诊断更有针对性。</div>
+      <div class="example">填写示例：SaaS / 软件 · 51-200 人 · 市场经理 · 目标"获客 / 线索" · 最头疼"内容产出慢、线索质量不稳定"。</div>
+    </div>
+    <div class="field"><label>所在行业<span class="req">*</span></label>${pillGroup('industry', INDUSTRIES)}</div>
+    <div class="field"><label>企业规模<span class="req">*</span></label>${pillGroup('size', SIZES)}</div>
+    <div class="field"><label>你的角色<span class="req">*</span></label>${pillGroup('role', ROLES)}</div>
+    <div class="field"><label>主要营销目标（最多选 3 个）<span class="req">*</span></label>
+      ${limitGroup('goals', GOALS, 3)}
+      <div class="chips-counter">已选 <b data-counter>${state.info.goals.length}</b> / 3</div></div>
+    ${tagField('info', 'pain', '当前最头疼的营销问题<span class="req">*</span>', PAIN_PRESETS, '可补充：其他更具体的困扰……')}
+    <div class="hint" style="margin-top:-0.6rem">先点选常见问题，再补充你自己的，这会影响最后的行动建议。</div>
+    <div class="actions" style="margin-top:1.6rem">
+      <button class="btn btn-outline" data-switch>← 切换版本</button>
+      <button class="btn btn-primary" data-next>下一步：营销基础评分 →</button>
+    </div>
+  </div>`;
+}
+
+// ── 个人版：基本信息 ──
+function renderPersonInfo() {
+  return `<div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title"><span class="ico">①</span>基本信息</div>
+      <div class="section-desc">点选即可。先了解你的角色与日常工作，让个人诊断更准。</div>
+      <div class="example">填写示例：内容 / 品牌 · 主要负责"公众号 / 短视频 / 活动" · 最想用 AI 解决"内容产出慢、选题没灵感"。</div>
+    </div>
+    <div class="field"><label>你的角色<span class="req">*</span></label>${pillGroup('role', ROLES)}</div>
+    ${tagField('info', 'work', '你主要负责的营销工作（可多选）<span class="req">*</span>', WORK_PRESETS, '可补充其他你负责的工作……')}
+    <div style="height:0.6rem"></div>
+    ${tagField('info', 'wish', '你最想用 AI 解决的问题<span class="req">*</span>', WISH_PRESETS, '可补充：其他你想让 AI 帮忙的事……')}
+    <div class="hint" style="margin-top:-0.6rem">先点选，再补充你自己的，这会影响最后的成长建议。</div>
+    <div class="actions" style="margin-top:1.6rem">
+      <button class="btn btn-outline" data-switch>← 切换版本</button>
+      <button class="btn btn-primary" data-next>下一步：个人 AI 能力评分 →</button>
+    </div>
+  </div>`;
+}
+
+// ── Step 2/3：评分 ──
+function renderScore(group, items, title, emoji, desc, idx) {
+  const q = items.map((it,i)=>{
+    const v = state[group][it.key];
+    const btns = [1,2,3,4,5].map(n=>`<button class="score-btn ${v===n?'selected':''}" data-score="${group}" data-key="${it.key}" data-val="${n}">${n}</button>`).join('');
+    return `<div class="question-item">
+      <div class="q-label"><span class="q-num">${i+1}</span>${it.name}</div>
+      <div class="q-sub">${it.sub}</div>
+      <div class="score-row">${btns}</div>
+      <div class="score-hint"><span>1 ${it.low}</span><span>3 ${it.mid}</span><span>5 ${it.high}</span></div>
+    </div>`;
+  }).join('');
+  return `<div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title"><span class="ico">${idx}</span>${emoji} ${title}</div>
+      <div class="section-desc">${desc}</div>
+    </div>
+    ${q}
+    <div class="actions" style="margin-top:1.6rem">
+      <button class="btn btn-outline" data-prev>← 上一步</button>
+      <button class="btn btn-primary" data-next>下一步 →</button>
+    </div>
+  </div>`;
+}
+
+// ── Step 4：机会识别 ──
+function renderOpp() {
+  const fields = OPP_FIELDS.map(f=>
+    tagField('opp', f.key, f.q, f.opts, '可补充其他……')
+  ).join('');
+  return `<div class="section-card fade-in">
+    <div class="section-header">
+      <div class="section-title"><span class="ico">④</span>🔍 AI 营销机会识别</div>
+      <div class="section-desc">先盘点哪些任务"最值得交给 AI"——重复、耗时、有清晰输入输出、出错风险低的任务，往往是最佳起点。可不填，但填得越细，建议越准。</div>
+      <div class="example">填写示例：最重复的任务"每周 3 篇公众号"；最耗时间"竞品调研"；输入输出清晰"产品资料 → 推文初稿"。</div>
+    </div>
+    ${fields}
+    <div class="field" style="margin-top:0.5rem">
+      <label>你最想优先尝试的 AI 营销场景（最多选 3 个）<span class="req">*</span></label>
+      ${limitGroup('scenes', SCENARIOS, 3)}
+      <div class="chips-counter">已选 <b data-counter>${state.scenes.length}</b> / 3</div>
+    </div>
+    <div class="actions" style="margin-top:1.6rem">
+      <button class="btn btn-outline" data-prev>← 上一步</button>
+      <button class="btn btn-primary" data-next>生成诊断报告 →</button>
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────
+// 计算
+// ─────────────────────────────────────────
+function avg(group, items){ return items.reduce((s,i)=>s+state[group][i.key],0)/items.length; }
+
+function computeLevel(baseScore, aiScore){
+  // 等级以「AI 应用」为主轴判定——这是一份 AI 营销成熟度工具，
+  // 营销基础不再当门槛，改由「背离修饰语」单独呈现（见 divergenceNote）。
+  const hasFlow  = state.ai.share>=3 || state.ai.flow>=3;   // 工作流已沉淀 / 团队共享
+  const builtTool = state.ai.tool>=4;                       // 工具化能力（已具备，非"想做"）
+  if (aiScore>=4   && builtTool) return 'L5';
+  if (aiScore>=3.5 && hasFlow)   return 'L4';
+  if (aiScore>=3)  return 'L3';
+  if (aiScore>=2)  return 'L2';
+  return 'L1';
+}
+
+// 营销目标 → 相关场景（用于个性化推荐排序）
+const GOAL_SCENES = {
+  '业务增长':   ['market','sales','campaign'],
+  '获客·线索': ['sales','content','compete'],
+  '产品上线':   ['content','image','video','market'],
+  '提升品牌认知':['content','image','video'],
+  '提高转化率': ['campaign','sales','insight'],
+  '大客户孵化': ['insight','sales','market'],
+  '私域·复购': ['private','repurch'],
+  '降本提效':   ['content','image','sales'],
+};
+function goalSceneKeys(){
+  const set = new Set();
+  (state.info.goals||[]).forEach(g=>(GOAL_SCENES[g]||[]).forEach(k=>set.add(k)));
+  return set;
+}
+
+// 综合维度项（优势/短板用）
+function allItems(){
+  return [
+    ...BASE_ITEMS.map(i=>({key:i.key, name:i.name, score:state.base[i.key], grp:'营销基础'})),
+    ...AI_ITEMS.map(i=>({key:i.key, name:i.name, score:state.ai[i.key], grp:'AI 应用'})),
+  ];
+}
+
+// 单项深度建议（s=作为优势 / w=作为短板）
+const ITEM_ADVICE = {
+  cust:   { s:'你对"卖给谁"判断清晰，AI 生成的内容与话术能精准对人——建议优先围绕 ICP 搭建内容与触达。', w:'先把理想客户画像写清楚（行业/角色/场景/动机）；客户不清晰，AI 产出再多也是无效内容。' },
+  value:  { s:'差异化价值清晰，这是高质量内容与话术的源头，能显著提升 AI 输出的说服力。', w:'先提炼一句话价值主张；卖点模糊时，AI 只会把模糊放大成更多平庸文案。' },
+  content:{ s:'已有可复用内容资产，喂给 AI 做改写/再创作能立刻放大产能。', w:'缺内容沉淀，AI 每次从零编、质量不稳；建议先建一个最小可复用素材库。' },
+  channel:{ s:'清楚渠道效率，能让 AI 产出投到对的地方，避免好内容浪费在低效渠道。', w:'渠道判断偏感觉；建议先建渠道效率台账，再让 AI 辅助分配与优化。' },
+  convert:{ s:'转化流程清晰，AI 生成的话术/跟进能嵌进流程直接用，转化提升更直接。', w:'转化流程断点多；先理顺线索到成交的阶段与标准，AI 才有发力点。' },
+  data:   { s:'有数据反馈机制，能客观验证 AI 带来的提升，形成"用→测→优化"闭环。', w:'缺数据反馈，效果好坏全凭感觉；建议先搭一个核心指标看板。' },
+  freq:   { s:'团队已高频用 AI，习惯已养成，适合向工作流与工具化进阶。', w:'AI 使用频率低；先从 1 个高频任务开始，让团队尝到甜头。' },
+  prompt: { s:'提示词能力强、能稳定拿到好结果，是带动团队的关键种子能力。', w:'提示词偏简单；建议学结构化模板（角色+上下文+示例+格式），产出立刻更稳。' },
+  flow:   { s:'已沉淀 AI 工作流，说明 AI 已是生产力而非玩具，可向标准化/工具化推进。', w:'AI 还停在零散使用；建议挑 1 条流程把 AI 介入点固定下来。' },
+  share:  { s:'团队已共享复用，个人能力正在变成组织能力，复制速度快。', w:'好用法散落在个人手里；建议建共享提示词库，让能力可复制。' },
+  review: { s:'已有审核标准，能放心规模化使用 AI，不易踩品牌/合规坑。', w:'缺审核把关；规模化前先定一个简单核查清单，避免出错被放大。' },
+  tool:   { s:'已具备工具化能力，这是迈向 L5 的核心门槛，可重点投入做 Agent。', w:'还在纯手动；建议先把 1 个高频任务做成模板/小工具，迈出工具化第一步。' },
+};
+
+function pickScenes(levelNum){
+  const cap = levelNum + 1; // 可承接难度上限
+  const gk = goalSceneKeys();
+  const rank = (a,b) => {
+    const ga = gk.has(a.key)?0:1, gb = gk.has(b.key)?0:1; // 命中目标的优先
+    return ga!==gb ? ga-gb : a.diff-b.diff;               // 其次按从易到难
+  };
+  const sel = state.scenes.map(k=>SCENARIOS.find(s=>s.key===k));
+  let ready = sel.filter(s=>s.diff<=cap && !(s.key==='agent'&&levelNum<4)).sort(rank);
+  let defer = sel.filter(s=>!ready.includes(s));
+  // 不足 3 个，从全局补足（同样优先命中目标、再按难度）
+  if (ready.length<3){
+    const fill = SCENARIOS.filter(s=>!sel.includes(s) && s.diff<=cap && !(s.key==='agent'&&levelNum<4))
+      .sort(rank);
+    ready = ready.concat(fill).slice(0,3);
+  } else {
+    ready = ready.slice(0,3);
+  }
+  return { ready, defer };
+}
+
+function build30Day(level, weakBase, weakAI, topScene){
+  const acts = [];
+  acts.push({wk:'第 1 周', t:`<b>补地基 ·「${weakBase.name}」</b>：组织一次半天工作坊，把它彻底讲清并形成书面定义（如一页 ICP 画像 / 价值主张画布 / 渠道效率台账）。这决定了后续所有 AI 产出的"输入质量"。`});
+  acts.push({wk:'第 2 周', t:`<b>练内功 ·「${weakAI.name}」</b>：选 1 个高频任务，沉淀一条带"角色+上下文+示例+输出格式"的标准提示词，连续跑 3 次验证稳定性，然后写进团队共享库。`});
+  if (topScene) acts.push({wk:'第 3 周', t:`<b>做试点 ·「${topScene.name}」</b>：${SCENE_REASON[topScene.key]||'做出第一版可用成果。'}建议设一个可衡量的小目标，如"产出时间减半"或"周产能翻倍"。`});
+  const tail = {
+    L1:'<b>建认知</b>：用 AI 完整跑通 1 件最简单的小事（一篇推文初稿 / 一张海报），让团队亲眼看到"AI 真能省时间"，先建立意愿，再谈推广。',
+    L2:'<b>能复制</b>：把本月跑顺的 1-2 个 AI 用法整理成"提示词+步骤截图"的一页 SOP，让第二、三个人也能照着复现，把个人能力变成团队能力。',
+    L3:'<b>定标准</b>：复盘试点的投入产出，挑出 1 个最值得固化的场景，定义它的标准流程与质量标准，准备嵌入日常工作流。',
+    L4:'<b>扩规模</b>：把已验证的工作流写成团队标准并配质量审核清单，安排一次内部分享/培训，把复用范围从 1 人扩到整个团队。',
+    L5:'<b>做 Agent</b>：选 1 个最稳定、最高频的工作流做成 Agent / 小工具原型，跑通"输入→自动产出→人工终审"闭环，沉淀为可持续复用的资产。',
+  };
+  acts.push({wk:'第 4 周', t: tail[level]});
+  return acts;
+}
+
+// ── Step 5：报告 ──
+function renderReport() {
+  const baseScore = avg('base', BASE_ITEMS);
+  const aiScore = avg('ai', AI_ITEMS);
+  const level = computeLevel(baseScore, aiScore);
+  const L = LEVELS[level];
+  const levelNum = parseInt(level.slice(1));
+
+  const items = allItems().sort((a,b)=>b.score-a.score);
+  const strengths = items.slice(0,2);
+  const weaknesses = items.slice(-2).reverse();
+  const weakBase = [...BASE_ITEMS].map(i=>({name:i.name,score:state.base[i.key]})).sort((a,b)=>a.score-b.score)[0];
+  const weakAI = [...AI_ITEMS].map(i=>({name:i.name,score:state.ai[i.key]})).sort((a,b)=>a.score-b.score)[0];
+
+  const { ready, defer } = pickScenes(levelNum);
+  const actions = build30Day(level, weakBase, weakAI, ready[0]);
+  const gk = goalSceneKeys();
+
+  const today = new Date().toLocaleDateString('zh-CN');
+
+  return `<div class="fade-in">
+    <div class="report-banner">
+      <div class="rb-level-tag">AI 营销成熟度</div>
+      <div class="rb-level" style="color:#fff">${L.tag} · ${L.name}</div>
+      <div class="rb-desc">${L.desc}</div>
+      <div class="rb-scores">
+        <div class="rb-score"><div class="v">${aiScore.toFixed(1)}<span style="font-size:0.9rem;opacity:0.7">/5</span></div><div class="l">AI 应用分（定级主轴）</div></div>
+        <div class="rb-score"><div class="v">${baseScore.toFixed(1)}<span style="font-size:0.9rem;opacity:0.7">/5</span></div><div class="l">营销基础分（背景）</div></div>
+      </div>
+    </div>
+
+    <div class="report-block">
+      <div class="meta-line">
+        <b>诊断对象：</b>${state.info.industry||'—'} · ${state.info.size||'—'} · ${state.info.role||'—'}　|
+        <b>主要目标：</b>${state.info.goals.join(' / ')||'—'}<br>
+        <b>当前最头疼：</b>${flatten(state.info.pain)||'—'}　|　<b>生成日期：</b>${today}
+        <div style="margin-top:0.5rem;font-size:0.78rem;color:#adb5bd">※ 本报告基于单一填写者对组织现状的判断，建议与团队核对后再作结论。</div>
+      </div>
+    </div>
+
+    ${renderLadder(LEVELS, level)}
+
+    <div class="report-grid">
+      <div class="radar-card"><h3>营销基础成熟度</h3><canvas id="radarBase" width="300" height="300"></canvas></div>
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">📊</span>营销基础 · 六项得分</h3>
+        ${scoreBars(BASE_ITEMS, state.base)}
+        ${BAR_LEGEND}
+      </div>
+    </div>
+    <div class="report-grid">
+      <div class="radar-card"><h3>AI 应用成熟度</h3><canvas id="radarAI" width="300" height="300"></canvas></div>
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">📊</span>AI 应用 · 六项得分</h3>
+        ${scoreBars(AI_ITEMS, state.ai)}
+        ${BAR_LEGEND}
+      </div>
+    </div>
+
+    <div class="report-grid">
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">💪</span>当前主要优势</h3>
+        ${strengths.map(s=>`<div class="tl-item tl-good"><span class="ic">▲</span><div><b>${s.name}</b>（${s.grp} · ${s.score}分）—— ${ITEM_ADVICE[s.key].s}</div></div>`).join('')}
+      </div>
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">⚠️</span>主要短板</h3>
+        ${weaknesses.map(s=>`<div class="tl-item tl-bad"><span class="ic">▼</span><div><b>${s.name}</b>（${s.grp} · ${s.score}分）—— ${ITEM_ADVICE[s.key].w}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="report-block">
+      <h3><span class="em">🚀</span>最适合优先尝试的 3 个 AI 营销场景</h3>
+      ${ready.map((s,i)=>`<div class="scene-rec"><div class="rank">${i+1}</div><div><div class="sn">${s.name}${gk.has(s.key)?' <span style="font-size:0.7rem;font-weight:700;color:var(--primary);background:var(--primary-light);border-radius:5px;padding:0.05rem 0.4rem;margin-left:0.3rem">↳ 对应你的目标</span>':''}</div><div class="sr">${SCENE_REASON[s.key]||'适合当前阶段优先试点。'}</div></div></div>`).join('')}
+    </div>
+
+    ${defer.length ? `<div class="report-block">
+      <h3><span class="em">⏳</span>暂时不建议优先做的场景</h3>
+      <div style="font-size:0.84rem;color:var(--muted);margin-bottom:0.6rem;line-height:1.6">以下场景对数据基础 / 工作流成熟度要求较高，建议等前面短板补齐后再推进：</div>
+      ${defer.map(s=>`<span class="scene-defer">${s.name}　·　${SCENE_REASON[s.key]||''}</span>`).join('')}
+    </div>` : ''}
+
+    <div class="report-block">
+      <h3><span class="em">📅</span>未来 30 天行动建议</h3>
+      ${actions.map(a=>`<div class="action-item"><span class="wk">${a.wk}</span><div>${a.t}</div></div>`).join('')}
+    </div>
+
+    <div class="report-footer">
+      <button class="btn btn-outline" data-restart>重新诊断</button>
+      <button class="btn btn-primary" onclick="window.print()">📄 保存 / 打印报告</button>
+    </div>
+  </div>`;
+}
+
+function radarOpts(max){
+  return { responsive:false, plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>` ${c.raw} / ${max} 分`}} },
+    scales:{ r:{ min:0, max, ticks:{ stepSize:1, font:{size:9}, color:'#adb5bd', backdropColor:'transparent' },
+      pointLabels:{ font:{size:11, weight:'600'}, color:'#495057' }, grid:{color:'#e9ecef'}, angleLines:{color:'#e9ecef'} } } };
+}
+function drawRadars(){
+  new Chart(document.getElementById('radarBase'), { type:'radar',
+    data:{ labels:BASE_ITEMS.map(i=>i.name), datasets:[{ data:BASE_ITEMS.map(i=>state.base[i.key]),
+      backgroundColor:'rgba(59,91,219,0.15)', borderColor:'#3b5bdb', borderWidth:2.5,
+      pointBackgroundColor:'#3b5bdb', pointRadius:4 }] }, options:radarOpts(5) });
+  new Chart(document.getElementById('radarAI'), { type:'radar',
+    data:{ labels:AI_ITEMS.map(i=>i.name), datasets:[{ data:AI_ITEMS.map(i=>state.ai[i.key]),
+      backgroundColor:'rgba(112,72,232,0.15)', borderColor:'#7048e8', borderWidth:2.5,
+      pointBackgroundColor:'#7048e8', pointRadius:4 }] }, options:radarOpts(5) });
+}
+
+// ─────────────────────────────────────────
+// 个人版：计算 & 报告
+// ─────────────────────────────────────────
+function computePersonLevel(avg){
+  const hasShare = state.person.plearn>=3;                                       // 学习与分享
+  const hasBuild = state.person.pcover>=4 && state.person.pbreadth>=4;            // 已具备构建能力（覆盖度+广度），而非"想做"
+  if (avg>=4 && hasBuild) return 'L5';
+  if (avg>=3.5 && hasShare) return 'L4';
+  if (avg>=3) return 'L3';
+  if (avg>=2.5) return 'L2';
+  return 'L1';
+}
+
+function buildPerson30(level, weak, topScene){
+  const acts = [];
+  acts.push({wk:'第 1 周', t:`<b>补最弱项 ·「${weak.name}」</b>：${PERSON_ADVICE[weak.key].w}`});
+  acts.push({wk:'第 2 周', t:`<b>跑顺一个任务</b>：选你最常做的 1 个营销任务，用 AI 完整跑一遍，并把好用的提示词存进自己的"提示词库"。`});
+  if (topScene) acts.push({wk:'第 3 周', t:`<b>试一个新场景 ·「${topScene.name}」</b>：${SCENE_REASON[topScene.key]||'做出第一版可用成果。'}`});
+  const tail = {
+    L1:'<b>建体感</b>：本月内用 AI 完整做完 1 件你最常做的小事（一篇推文 / 一张海报），亲眼感受"AI 真能省时间"。',
+    L2:'<b>攒资产</b>：把跑顺的 2-3 条提示词整理进个人提示词库，下次直接复用、不再从零开始。',
+    L3:'<b>串流程</b>：把零散用法串成一条个人工作流（如选题→初稿→审核→排版），固定每步的 AI 介入点。',
+    L4:'<b>带一片</b>：把你的方法做成 1 份模板 / SOP，分享给至少 2 位同事，从"自己快"到"带快一片"。',
+    L5:'<b>做工具</b>：选 1 个你最常重复的任务，做成一个小工具 / GPTs / Agent，让同事也能一键复用。',
+  };
+  acts.push({wk:'第 4 周', t: tail[level]});
+  return acts;
+}
+
+function renderPersonReport(){
+  const items = PERSON_ITEMS.map(i=>({key:i.key, name:i.name, score:state.person[i.key]}));
+  const avg = items.reduce((s,i)=>s+i.score,0)/items.length;
+  const level = computePersonLevel(avg);
+  const L = PERSON_LEVELS[level];
+  const levelNum = parseInt(level.slice(1));
+
+  const sorted = [...items].sort((a,b)=>b.score-a.score);
+  const strengths = sorted.slice(0,2);
+  const weaknesses = sorted.slice(-2).reverse();
+  const { ready, defer } = pickScenes(levelNum);
+  const actions = buildPerson30(level, weaknesses[0], ready[0]);
+  const today = new Date().toLocaleDateString('zh-CN');
+
+  return `<div class="fade-in">
+    <div class="report-banner">
+      <div class="rb-level-tag">你的 AI 营销成熟度</div>
+      <div class="rb-level" style="color:#fff">${L.tag} · ${L.name}</div>
+      <div class="rb-desc">${L.desc}</div>
+      <div class="rb-scores">
+        <div class="rb-score"><div class="v">${avg.toFixed(1)}<span style="font-size:0.9rem;opacity:0.7">/5</span></div><div class="l">综合能力得分</div></div>
+      </div>
+    </div>
+
+    <div class="report-block">
+      <div class="meta-line">
+        <b>角色：</b>${state.info.role||'—'}　|　<b>主要负责：</b>${flatten(state.info.work)||'—'}<br>
+        <b>最想用 AI 解决：</b>${flatten(state.info.wish)||'—'}　|　<b>生成日期：</b>${today}
+      </div>
+    </div>
+
+    ${renderLadder(PERSON_LEVELS, level)}
+
+    <div class="report-grid">
+      <div class="radar-card"><h3>能力雷达</h3><canvas id="radarPerson" width="300" height="300"></canvas></div>
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">📊</span>六项能力得分</h3>
+        ${scoreBars(PERSON_ITEMS, state.person)}
+        ${BAR_LEGEND}
+      </div>
+    </div>
+
+    <div class="report-grid">
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">💪</span>你的优势能力</h3>
+        ${strengths.map(s=>`<div class="tl-item tl-good"><span class="ic">▲</span><div><b>${s.name}</b>（${s.score}分）—— ${PERSON_ADVICE[s.key].s}</div></div>`).join('')}
+      </div>
+      <div class="report-block" style="margin:0">
+        <h3><span class="em">⚠️</span>待提升能力</h3>
+        ${weaknesses.map(s=>`<div class="tl-item tl-bad"><span class="ic">▼</span><div><b>${s.name}</b>（${s.score}分）—— ${PERSON_ADVICE[s.key].w}</div></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="report-block">
+      <h3><span class="em">🚀</span>最适合你优先尝试的 3 个 AI 场景</h3>
+      ${ready.map((s,i)=>`<div class="scene-rec"><div class="rank">${i+1}</div><div><div class="sn">${s.name}</div><div class="sr">${SCENE_REASON[s.key]||'适合当前阶段优先试点。'}</div></div></div>`).join('')}
+    </div>
+
+    ${defer.length ? `<div class="report-block">
+      <h3><span class="em">⏳</span>建议稍后再碰的场景</h3>
+      <div style="font-size:0.84rem;color:var(--muted);margin-bottom:0.6rem;line-height:1.6">以下场景门槛偏高，等你把上面的能力补一补，再上手会顺很多：</div>
+      ${defer.map(s=>`<span class="scene-defer">${s.name}　·　${SCENE_REASON[s.key]||''}</span>`).join('')}
+    </div>` : ''}
+
+    <div class="report-block">
+      <h3><span class="em">📅</span>未来 30 天个人成长建议</h3>
+      ${actions.map(a=>`<div class="action-item"><span class="wk">${a.wk}</span><div>${a.t}</div></div>`).join('')}
+    </div>
+
+    <div class="report-footer">
+      <button class="btn btn-outline" data-restart>重新诊断</button>
+      <button class="btn btn-primary" onclick="window.print()">📄 保存 / 打印报告</button>
+    </div>
+  </div>`;
+}
+
+// 成熟度阶梯（你在哪 / 下一步去哪）
+function renderLadder(levelsObj, current){
+  const keys = ['L1','L2','L3','L4','L5'];
+  const ci = keys.indexOf(current);
+  const nodes = keys.map((k,i)=>{
+    const L = levelsObj[k];
+    const cls = i<ci ? 'past' : i===ci ? 'cur' : 'future';
+    return `<div class="ladder-node ${cls}">
+      <div class="ladder-dot">${L.tag}</div>
+      <div class="ladder-name">${L.name}</div>
+    </div>`;
+  }).join('');
+  const next = ci<4 ? levelsObj[keys[ci+1]] : null;
+  const goal = levelsObj[current].goal;
+  const callout = next
+    ? `<div class="ladder-goal"><b>下一步目标 → ${next.tag} ${next.name}</b><br>${goal}</div>`
+    : `<div class="ladder-goal"><b>🎉 你已处在最高阶段</b><br>${goal}</div>`;
+  return `<div class="report-block">
+    <h3><span class="em">🧭</span>成熟度阶梯 · 你在哪、下一步去哪</h3>
+    <div class="ladder">${nodes}</div>
+    ${callout}
+  </div>`;
+}
+
+const barColor = s => s<2.5 ? '#fa5252' : s<3.5 ? '#f59f00' : '#2f9e44';
+const BAR_LEGEND = `<div class="bar-legend"><i style="color:#fa5252">■</i>2.5 以下 待补强 &nbsp;<i style="color:#f59f00">■</i>2.5–3.5 发展中 &nbsp;<i style="color:#2f9e44">■</i>3.5 以上 已具备</div>`;
+function scoreBars(items, scoreObj){
+  return items.map(it=>{
+    const s = scoreObj[it.key], c = barColor(s);
+    return `<div class="bar-row">
+      <div class="bar-name">${it.name}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${s/5*100}%;background:${c}"></div></div>
+      <div class="bar-val" style="color:${c}">${s}</div>
+    </div>`;
+  }).join('');
+}
+
+function drawPersonRadar(){
+  new Chart(document.getElementById('radarPerson'), { type:'radar',
+    data:{ labels:PERSON_ITEMS.map(i=>i.name), datasets:[{ data:PERSON_ITEMS.map(i=>state.person[i.key]),
+      backgroundColor:'rgba(112,72,232,0.15)', borderColor:'#7048e8', borderWidth:2.5,
+      pointBackgroundColor:'#7048e8', pointRadius:4 }] }, options:radarOpts(5) });
+}
+
+// ─────────────────────────────────────────
+// 校验 & 事件
+// ─────────────────────────────────────────
+function validate() {
+  const i=state.info;
+  if (state.mode==='personal'){
+    if (step===0){ if(!i.role||!flatten(i.work)||!flatten(i.wish)){ alert('请完整填写基本信息（角色 / 负责的工作 / 最想用 AI 解决的问题）。'); return false; } }
+    if (step===1){ if(PERSON_ITEMS.some(it=>state.person[it.key]===0)){ alert('请为 6 项个人 AI 能力全部打分。'); return false; } }
+    if (step===2){ if(state.scenes.length===0){ alert('请至少选择 1 个想优先尝试的 AI 营销场景。'); return false; } }
+    return true;
+  }
+  if (step===0){
+    if(!i.industry||!i.size||!i.role||!i.goals.length||!flatten(i.pain)){ alert('请完整填写基本信息（带 * 为必填：行业/规模/角色/至少 1 个目标/最头疼问题）。'); return false; }
+  }
+  if (step===1){ if(BASE_ITEMS.some(it=>state.base[it.key]===0)){ alert('请为 6 项营销基础全部打分。'); return false; } }
+  if (step===2){ if(AI_ITEMS.some(it=>state.ai[it.key]===0)){ alert('请为 6 项 AI 应用全部打分。'); return false; } }
+  if (step===3){ if(state.scenes.length===0){ alert('请至少选择 1 个想优先尝试的 AI 营销场景。'); return false; } }
+  return true;
+}
+
+function bindStep() {
+  // 单选标签 — 原地切换，不重渲染
+  document.querySelectorAll('[data-pick]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.info[el.dataset.pick]=el.dataset.val;
+      el.parentElement.querySelectorAll('[data-pick]').forEach(c=>c.classList.toggle('selected', c===el));
+    });
+  });
+  // 多选标签（pain / opp）— 原地切换
+  document.querySelectorAll('[data-tag]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const obj=(el.dataset.scope==='info'?state.info:state.opp)[el.dataset.tag];
+      const v=el.dataset.val, i=obj.tags.indexOf(v);
+      if(i>=0) obj.tags.splice(i,1); else obj.tags.push(v);
+      el.classList.toggle('selected');
+    });
+  });
+  // 限选标签组（goals / scenes）— 原地刷新
+  document.querySelectorAll('[data-lim]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const group=el.closest('[data-limgroup]'); const max=+group.dataset.max;
+      const arr=group.dataset.limgroup==='goals'?state.info.goals:state.scenes;
+      const k=el.dataset.limkey, i=arr.indexOf(k);
+      if(i>=0) arr.splice(i,1); else if(arr.length<max) arr.push(k);
+      refreshLimit(group);
+    });
+  });
+  // 补充输入 — 不重渲染，避免失焦
+  document.querySelectorAll('[data-text]').forEach(el=>{
+    el.addEventListener('input', ()=>{ (el.dataset.scope==='info'?state.info:state.opp)[el.dataset.text].text=el.value; });
+  });
+  // 打分 — 原地切换
+  document.querySelectorAll('[data-score]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state[el.dataset.score][el.dataset.key]=+el.dataset.val;
+      el.parentElement.querySelectorAll('[data-score]').forEach(b=>b.classList.toggle('selected', b===el));
+    });
+  });
+  // 版本选择卡片
+  document.querySelectorAll('[data-mode]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.mode=el.dataset.mode; step=0; render(true); });
+  });
+  // 切换版本（回到选择页）
+  document.querySelectorAll('[data-switch]').forEach(el=>{
+    el.addEventListener('click', ()=>{ resetAll(); render(true); });
+  });
+  const next=document.querySelector('[data-next]'); if(next) next.addEventListener('click', ()=>{ if(validate()){ step++; render(true); } });
+  const prev=document.querySelector('[data-prev]'); if(prev) prev.addEventListener('click', ()=>{ step--; render(true); });
+  const rs=document.querySelector('[data-restart]'); if(rs) rs.addEventListener('click', ()=>{ resetAll(); render(true); });
+}
+
+function resetAll(){
+  step=0; state.mode=null;
+  state.base=blankScore(BASE_ITEMS); state.ai=blankScore(AI_ITEMS); state.person=blankScore(PERSON_ITEMS);
+  state.opp=blankOpp(); state.scenes=[]; state.info=blankInfo();
+}
+
+render();
+</script>
+</body>
+</html>

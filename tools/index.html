@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>互动工具 · GTMstar｜AI 营销 ROI 测算 & 成熟度诊断</title>
+<meta name="description" content="GTMstar 互动工具：B2B AI 营销 ROI 测算、企业 AI 营销成熟度诊断。动手试一试，再决定怎么用 AI 做营销。">
+<style>
+:root{
+  /* 改这一行就能换主色 */
+  --accent:#2456d6;
+  --accent-deep:#15348f;
+  --star:#e0a01f;
+
+  --ink:#0e1b30;
+  --ink-soft:#48536a;
+  --ink-faint:#8a93a6;
+  --bg:#fbfcfe;
+  --card:#ffffff;
+  --line:#e7ebf2;
+  --line-soft:#eef1f7;
+  --tint:#f4f7fd;
+  --shadow:0 1px 2px rgba(14,27,48,.04), 0 10px 30px rgba(20,52,143,.06);
+  --shadow-hover:0 2px 6px rgba(14,27,48,.06), 0 22px 50px rgba(20,52,143,.13);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:920px;margin:0 auto;padding:0 26px;}
+
+/* ===== top bar ===== */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 0;border-bottom:1px solid var(--line-soft);
+}
+.brand{font-size:18px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;}
+.brand .mark{color:var(--star);font-size:16px;}
+.back{font-size:14px;color:var(--ink-soft);font-weight:500;transition:color .15s;}
+.back:hover{color:var(--accent);}
+
+/* ===== hero ===== */
+.hero{
+  position:relative;padding:74px 0 52px;overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;top:-160px;left:50%;transform:translateX(-50%);
+  width:680px;height:420px;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(224,160,31,.10) 0%,rgba(36,86,214,.05) 38%,transparent 68%);
+}
+.eyebrow{
+  position:relative;display:inline-flex;align-items:center;gap:9px;
+  font-size:13px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);
+  margin-bottom:20px;
+}
+.eyebrow .star{color:var(--star);font-size:14px;}
+.eyebrow .en{letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent);}
+.eyebrow .dot{color:var(--ink-faint);}
+h1{
+  position:relative;
+  font-size:clamp(29px,5.2vw,46px);font-weight:800;letter-spacing:-.02em;
+  line-height:1.14;color:var(--ink);max-width:16em;
+}
+.lede{
+  position:relative;margin-top:20px;font-size:clamp(15px,2.2vw,17.5px);
+  color:var(--ink-soft);max-width:34em;
+}
+.honest{
+  position:relative;margin-top:22px;display:inline-flex;align-items:flex-start;gap:9px;
+  font-size:14px;color:var(--ink-soft);background:var(--tint);
+  border:1px solid var(--line);border-radius:11px;padding:11px 15px;max-width:36em;
+}
+.honest .tag{color:var(--accent);font-weight:700;white-space:nowrap;}
+
+/* ===== tools ===== */
+.tools{padding:8px 0 4px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.tool{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:26px 26px 24px;box-shadow:var(--shadow);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.tool:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:#cfdaf3;}
+.tool .cat{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:12.5px;font-weight:700;letter-spacing:.03em;color:var(--accent);margin-bottom:13px;
+}
+.tool .cat .star{color:var(--star);}
+.tool h2{font-size:20px;font-weight:750;letter-spacing:-.01em;line-height:1.3;color:var(--ink);}
+.tool p{margin-top:9px;font-size:14.5px;color:var(--ink-soft);flex:1;}
+.tool .open{
+  display:inline-flex;align-items:center;gap:7px;margin-top:18px;
+  font-size:14.5px;font-weight:700;color:var(--accent);
+}
+.tool .open svg{transition:transform .18s ease;}
+.tool:hover .open svg{transform:translateX(5px);}
+
+/* ===== feedback ===== */
+.feedback{
+  margin:44px 0 0;border-top:1px solid var(--line);
+}
+.fb-inner{
+  display:flex;gap:30px;align-items:center;flex-wrap:wrap;
+  background:linear-gradient(180deg,var(--tint),#fff);
+  border:1px solid var(--line);border-radius:18px;
+  padding:30px 32px;margin-top:44px;
+}
+.fb-text{flex:1;min-width:260px;}
+.fb-text .lbl{
+  display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;
+}
+.fb-text .lbl .star{color:var(--star);text-transform:none;}
+.fb-text h3{font-size:21px;font-weight:780;letter-spacing:-.01em;color:var(--ink);}
+.fb-text p{margin-top:10px;font-size:14.5px;color:var(--ink-soft);max-width:30em;}
+.fb-qr{text-align:center;}
+.fb-qr img{
+  width:138px;height:138px;border-radius:12px;border:1px solid var(--line);
+  background:#fff;padding:6px;display:block;
+}
+.fb-qr .wx{margin-top:10px;font-size:13px;color:var(--ink-soft);}
+.fb-qr .wx b{color:var(--ink);font-weight:600;}
+
+/* ===== footer ===== */
+footer{padding:38px 0 46px;margin-top:40px;border-top:1px solid var(--line-soft);}
+footer .line1{font-size:13.5px;color:var(--ink-soft);}
+footer .line2{font-size:12.5px;color:var(--ink-faint);margin-top:5px;}
+
+@media(max-width:640px){
+  .hero{padding:54px 0 40px;}
+  .grid{grid-template-columns:1fr;}
+  .fb-inner{padding:26px 22px;}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+  html{scroll-behavior:auto;}
+}
+
+/* gentle load-in */
+.fade{opacity:0;transform:translateY(12px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards;}
+.fade.d1{animation-delay:.05s;} .fade.d2{animation-delay:.13s;}
+.fade.d3{animation-delay:.21s;} .fade.d4{animation-delay:.29s;}
+@keyframes rise{to{opacity:1;transform:none;}}
+@media(prefers-reduced-motion:reduce){.fade{opacity:1;transform:none;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <a class="brand" href="https://www.gtmstar.com/"><span class="mark">✦</span>GTMstar</a>
+    <a class="back" href="https://www.gtmstar.com/">返回主站 →</a>
+  </div>
+
+  <section class="hero">
+    <span class="eyebrow fade d1">
+      <span class="star">✦</span>
+      <span class="en">Interactive Tools</span>
+      <span class="dot">·</span>
+      互动工具
+    </span>
+    <h1 class="fade d1">动手测一测，<br>比拍脑袋决定怎么用 AI 靠谱。</h1>
+    <p class="lede fade d2">两个能直接上手的小工具：一个帮你算清 AI 营销值不值得投，一个帮你看清现在走到了哪一步。打开就能用，不用注册。</p>
+    <p class="honest fade d2"><span class="tag">说句实话：</span>这两个工具还在打磨阶段，哪里数据不准、哪一步别扭，欢迎用完直接告诉我。</p>
+  </section>
+
+  <section class="tools">
+    <div class="grid">
+
+      <a class="tool fade d3" href="./roi/">
+        <span class="cat"><span class="star">✦</span> 测算 · ROI</span>
+        <h2>B2B AI 营销 ROI 测算</h2>
+        <p>输入你的营销投入与转化参数，估算引入 AI 后的投资回报，并生成可视化对比图。</p>
+        <span class="open">打开工具
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+      <a class="tool fade d4" href="./maturity/">
+        <span class="cat"><span class="star">✦</span> 诊断 · 成熟度</span>
+        <h2>企业 AI 营销成熟度诊断</h2>
+        <p>从多个维度评估你现在的 AI 营销应用水平，给出所处阶段与下一步的方向建议。</p>
+        <span class="open">打开工具
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="feedback">
+    <div class="fb-inner">
+      <div class="fb-text">
+        <span class="lbl"><span class="star">✦</span> Feedback · 提建议</span>
+        <h3>用着别扭？直接告诉我</h3>
+        <p>哪个数据不对、哪一步绕、想加什么功能——扫码加我微信说一句，比什么都管用。工具会根据反馈持续改。</p>
+      </div>
+      <div class="fb-qr">
+        <img src="https://www.gtmstar.com/wechat_qr.jpg" alt="彭罕妮 Hanni 微信二维码">
+        <div class="wx">微信：<b>hanni895005</b></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="line1">© 2026 GTMstar · 北极星目标驱动的 Go-To-Market 策略</div>
+    <div class="line2">由 彭罕妮 Hanni 制作</div>
+  </footer>
+
+</div>
+</body>
+</html>
